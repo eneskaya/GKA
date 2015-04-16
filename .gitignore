@@ -1,2 +1,6 @@
 .classpath
 /bin
+/.idea
+GKA.iml
+/out
+/libs

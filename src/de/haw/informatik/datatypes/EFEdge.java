@@ -4,8 +4,10 @@ public interface EFEdge {
 	
 	/**
 	 * String representation for edge labeling.
-	 * 
+	 *
+	 * @return
+	 * 			A formatted String, representing the edge labeling.
 	 */
-	public String formatted();
+	String formatted();
 	
 }
