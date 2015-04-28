@@ -1,11 +1,10 @@
 package de.haw.informatik.tests;
 
-import static org.junit.Assert.*;
-
+import de.haw.informatik.tools.GraphFileReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.haw.informatik.tools.GraphFileReader;
+import static org.junit.Assert.*;
 
 public class GraphFileReaderTest {
 

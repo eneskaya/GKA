@@ -1,20 +1,15 @@
 package de.haw.informatik.tools;
 
+import de.haw.informatik.datatypes.EFDefaultEdge;
+import de.haw.informatik.datatypes.EFVertex;
+import de.haw.informatik.datatypes.EFWeightedEdge;
+import org.jgrapht.graph.*;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
-import org.jgrapht.graph.AbstractGraph;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DirectedPseudograph;
-import org.jgrapht.graph.Pseudograph;
-import org.jgrapht.graph.WeightedPseudograph;
-
-import de.haw.informatik.datatypes.EFDefaultEdge;
-import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.datatypes.EFWeightedEdge;
 
 /**
  * Reads a .graph file and extracts data to generate 
@@ -85,7 +80,6 @@ public class GraphFileReader {
 	public boolean checkIfHeaderIsPresentAndValid() {
 		return _contentOfFile.get(0).matches("(#(directed|weighted|attributed) ?)+");
 	}
-	
 	
 	/**
 	 * Returns the properties of the graph specified in the header of a .graph file.

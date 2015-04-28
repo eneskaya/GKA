@@ -50,16 +50,14 @@ public class EFVertex implements Comparable<EFVertex> {
 	
 	@Override
 	public int hashCode() {
-		
-		// TODO Better hashCode() algorithm
-		
+
 		int result = 0;
 		
 		for (int i = 0; i < _name.length(); i++) {
 			result += _name.charAt(i);
 		}
 		
-		return result;
+		return _name.hashCode();
 		
 	}
 

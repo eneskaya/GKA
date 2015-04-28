@@ -1,10 +1,9 @@
 package de.haw.informatik.tools;
 
-import java.util.Set;
-
+import de.haw.informatik.datatypes.EFEdge;
 import org.jgrapht.graph.AbstractGraph;
 
-import de.haw.informatik.datatypes.EFEdge;
+import java.util.Set;
 
 public class GraphFileWriter {
 	
@@ -15,7 +14,7 @@ public class GraphFileWriter {
 	 * The GraphFileWriter extracts a given Graph to a .graph file
 	 * 
 	 * @param graph
-	 * 			The Graph to write to a file
+	 * 			The Graph to write to a file to
 	 * 
 	 * @param propertyCode
 	 * 			0	undirected <br/>
@@ -32,7 +31,6 @@ public class GraphFileWriter {
 		createHeader(propertyCode);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void print() {
 		System.out.println(_header);
 		
@@ -42,7 +40,12 @@ public class GraphFileWriter {
 			System.out.println(efEdge.formatted());
 		}
 	}
-	
+
+	/**
+	 * Create the header based on the porperty code.
+	 *
+	 * @param propertyCode
+	 */
 	private void createHeader(int propertyCode) {
 		switch (propertyCode) {
 			case 0:
@@ -70,6 +73,5 @@ public class GraphFileWriter {
 				_header = "#attributed #weighted";
 				break;
 		}
-		
 	}
 }
