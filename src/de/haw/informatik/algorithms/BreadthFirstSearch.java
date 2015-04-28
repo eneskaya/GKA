@@ -1,21 +1,22 @@
 package de.haw.informatik.algorithms;
 
+import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
 import org.jgrapht.Graph;
+import org.jgrapht.graph.Pseudograph;
+import org.jgrapht.graph.WeightedPseudograph;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class BreadthFirstSearch {
 
-    private Graph _graph;
+    private Graph<EFVertex, EFEdge> _graph;
 
     private EFVertex _source, _target;
 
     private Set<EFVertex> _allVertices;
 
-    public BreadthFirstSearch(Graph graph, EFVertex source, EFVertex target) {
+    public BreadthFirstSearch(Graph<EFVertex, EFEdge> graph, EFVertex source, EFVertex target) {
         _graph = graph;
         _source = source;
         _target = target;
@@ -23,41 +24,62 @@ public class BreadthFirstSearch {
         _allVertices = graph.vertexSet();
     }
 
-    private boolean doSearch() {
+    public String doSearch() {
 
-        HashMap<Integer, EFVertex> marked = new HashMap<Integer, EFVertex>();
+        if (_graph != null && _source != null && _target != null && !_source.equals(_target)
+                && _graph.containsVertex(_source) && _graph.containsVertex(_target))
+        {
+            Queue<EFVertex> queue = new LinkedList<EFVertex>();
+            Map<EFVertex, EFVertex> map = new HashMap<EFVertex, EFVertex>();
 
-        // Man kennzeichne den Knoten s mit 0 und setze i = 0
-        int i = 0;
-        marked.put(i, _source);
+            Set<EFEdge> edges;
 
-        // Man ermittle alle nichtgekennzeichneten Knoten in G
-    for(EFVertex v : marked.get(i)){
-        marked.put(i+1,)
-    }
+            queue.add(_source);
+            map.put(_source, null);
+            EFVertex temp;
 
-        return false;
-    }
+            while (!queue.isEmpty() && !queue.contains(_target)) {
+                temp = queue.poll();
 
-    /**
-     * Finds and returns all neighbours of a specified vertex in a graph.
-     *
-     * @param vertex
-     *          The vertex for which the neighbours should be found.
-     * @return
-     *          A set of vertices.
-     */
-    public Set<EFVertex> getNeighbourVertices(EFVertex vertex) {
+                edges = _graph.edgesOf(temp);
 
-        Set<EFVertex> neighbours = new HashSet<>();
+                for (EFEdge e : edges) {
+                    EFVertex targetVertex = _graph.getEdgeTarget(e);
+                    if (_graph instanceof WeightedPseudograph || _graph instanceof Pseudograph) {
+                        EFVertex targetVertex2;
 
-        for (EFVertex v : _allVertices) {
+                        if (!map.containsKey(targetVertex2 = _graph.getEdgeSource(e))) {
+                            queue.add(targetVertex2);
+                            map.put(targetVertex2, temp);
+                        }
+                    }
 
-            if (_graph.containsEdge(vertex, v)) {
-                neighbours.add(v);
+                    if (!map.containsKey(targetVertex)) {
+                        queue.add(targetVertex);
+                        map.put(targetVertex, temp);
+                    }
+                }
+            }
+
+            if (queue.contains(_target)) {
+                EFVertex current = _target;
+                String path = "";
+
+                int countEdges = 0;
+
+                while (!current.equals(_target)) {
+                    path = " --> " + current.toString() + path;
+                    current = map.get(current);
+                    countEdges++;
+                }
+
+                return "Der Kürzeste Weg von " + _source.toString()
+                        + " nach " + _target.toString() + " ist:\n"
+                        + _source.toString() + path + "\n"
+                        + "Dies erfolgt über " + countEdges + " Kante(n).";
             }
         }
 
-        return neighbours;
+        return "Vallah, hat nix geklappt.";
     }
 }

@@ -1,11 +1,8 @@
 package de.haw.informatik.startup;
 
-import de.haw.informatik.algorithms.BreadthFirstSearch;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.tools.GraphFileReader;
 import org.jgrapht.graph.AbstractGraph;
-
-import java.util.Set;
 
 
 public class StartUp  {
@@ -16,9 +13,6 @@ public class StartUp  {
 		AbstractGraph<?, ?> graph = reader.getGraph();
 
 		EFVertex a = new EFVertex("a");
-
-		BreadthFirstSearch bfs = new BreadthFirstSearch(graph, a, new EFVertex("k"));
-		Set<EFVertex> set = bfs.getNeighbourVertices(a);
 
 
 //		JGraphModelAdapter ma = new JGraphModelAdapter(graph);
