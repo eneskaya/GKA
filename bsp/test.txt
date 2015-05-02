@@ -1,0 +1,189 @@
+private void createUndirectedGraph() {		
+		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
+				new Pseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			EFVertex knoten1 = new EFVertex(v[0]);
+			EFVertex knoten2 = new EFVertex(v[1]);
+			
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+			
+			graph.addEdge(knoten1, knoten2);
+		}
+		
+		_graph = graph;
+	}
+	
+	private void createDirectedGraph() {
+		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
+				new DirectedPseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			EFVertex knoten1 = new EFVertex(v[0]);
+			EFVertex knoten2 = new EFVertex(v[1]);
+			
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+			
+			graph.addEdge(knoten1, knoten2);
+		}
+		
+		_graph = graph;
+	}
+	
+	private void createAttributedGraph() {
+		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
+				new Pseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			String[] v1 = v[0].split(":");
+			String[] v2 = v[1].split(":");
+			
+			EFVertex knoten1 = new EFVertex(v1[0], Integer.parseInt(v1[1]));
+			EFVertex knoten2 = new EFVertex(v2[0], Integer.parseInt(v2[1]));
+			
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+
+			graph.addEdge(knoten1, knoten2);
+		}
+		
+		_graph = graph;
+	}
+	
+	private void createWeightedGraph() {
+		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
+				new WeightedPseudograph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			double weight = Double.valueOf(v[1].split("::")[1]);
+			
+			EFVertex knoten1 = new EFVertex(v[0]);
+			EFVertex knoten2 = new EFVertex(v[1]);
+			
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+						
+			EFWeightedEdge edge = graph.addEdge(knoten1, knoten1);
+			
+			((WeightedPseudograph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
+		}
+
+		_graph = graph;
+	}
+	
+	private void createDirectedWeightedGraph() {
+		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
+				new DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			double weight = Double.valueOf(v[1].split("::")[1]);
+			
+			EFVertex knoten1 = new EFVertex(v[0]);
+			EFVertex knoten2 = new EFVertex(v[1].split("::")[0]);
+			
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+						
+			EFWeightedEdge edge = graph.addEdge(knoten1, knoten2);
+			
+			((DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
+		}
+
+		_graph = graph;
+	}
+	
+	private void createDirectedAttributedGraph() {
+		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
+				new DirectedPseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			String[] v1 = v[0].split(":");
+			String[] v2 = v[1].split(":");
+			
+			EFVertex knoten1 = new EFVertex(v1[0], Integer.parseInt(v1[1]));
+			EFVertex knoten2 = new EFVertex(v2[0], Integer.parseInt(v2[1]));
+			
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+
+			graph.addEdge(knoten1, knoten2);
+		}
+		
+		_graph = graph;
+	}
+	
+	private void createAttributedWeightedGraph() {
+		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
+				new WeightedPseudograph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			double weight = Double.valueOf(v[1].split("::")[1]);
+			
+			EFVertex knoten1 = 
+					new EFVertex(v[0].split(":")[0], Integer.parseInt(v[0].split(":")[1]));
+			
+			EFVertex knoten2 = 
+					new EFVertex(v[1].split(":")[0], Integer.parseInt( v[1].split(":")[1].split("::")[0]));
+
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+			
+			EFWeightedEdge edge = graph.addEdge(knoten1, knoten2);
+			
+			((WeightedPseudograph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
+		}
+
+		_graph = graph;
+	}
+	
+	private void createDirectedAttributedWeightedGraph() {
+		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
+				new DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
+		
+		for (int i = 0; i < _verticesAndEdges.size(); i++) {
+			
+			String[] v = _verticesAndEdges.get(i).split(",");
+			
+			double weight = Double.valueOf(v[1].split("::")[1]);
+			
+			EFVertex knoten1 = 
+					new EFVertex(v[0].split(":")[0], Integer.parseInt(v[0].split(":")[1]));
+			
+			EFVertex knoten2 = 
+					new EFVertex(v[1].split(":")[0], Integer.parseInt( v[1].split(":")[1].split("::")[0]));
+
+			
+			graph.addVertex(knoten1);
+			graph.addVertex(knoten2);
+
+			
+			EFWeightedEdge edge = graph.addEdge(knoten1, knoten2);
+			
+			((DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
+		}
+
+		_graph = graph;
+	}

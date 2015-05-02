@@ -6,6 +6,11 @@ public class EFVertex implements Comparable<EFVertex> {
 	private int _attributeValue;
 	private boolean _attributed;
 
+	public double minimalDistance = Double.POSITIVE_INFINITY;
+	public EFVertex predecessor;
+
+
+
 	/**
 	 * Creates an EFVertex which is attributed.
 	 * 
@@ -63,15 +68,8 @@ public class EFVertex implements Comparable<EFVertex> {
 
 	@Override
 	public int compareTo(EFVertex o) {
-		if (this._attributeValue > o.getAttributeValue()) {
-			return 1;
-		}
-		
-		if (this._attributeValue < o.getAttributeValue()) {
-			return -1;
-		}
-		
-		return 0;
+
+		return Double.compare(minimalDistance, o.minimalDistance);
 	}
 	
 	@Override

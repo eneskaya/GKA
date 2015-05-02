@@ -1,13 +1,17 @@
 package de.haw.informatik.tools;
 
 import de.haw.informatik.datatypes.EFEdge;
-import org.jgrapht.graph.AbstractGraph;
+import org.jgrapht.Graph;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Set;
 
 public class GraphFileWriter {
 	
-	private AbstractGraph<?, ?> _graph;
+	private Graph _graph;
 	private String _header;
 	
 	/**
@@ -26,25 +30,48 @@ public class GraphFileWriter {
 	 * 			6	directed AND attributed AND weighted <br/>
 	 * 			7	attributed AND weighted <br/>
 	 */
-	public GraphFileWriter(AbstractGraph<?, ?> graph, int propertyCode) {
+	public GraphFileWriter(Graph graph, int propertyCode) {
 		_graph = graph;
 		createHeader(propertyCode);
 	}
-	
-	public void print() {
-		System.out.println(_header);
-		
+
+	/**
+	 * Writes the given Graph to a file in the file system.
+	 *
+	 * @param pathToFile
+	 * 			The path to the file. Absolute or relative. With .graph extension
+	 */
+	public void write(String pathToFile) throws IOException {
+
+		File file = new File(pathToFile);
+
+		if (!file.exists()) {
+			file.createNewFile();
+		}
+
+		FileWriter fw = new FileWriter(file);
+		BufferedWriter bw = new BufferedWriter(fw);
+
+
+		// If the header is empty leave out the line
+		if (!_header.equals("")) {
+			bw.write(_header);
+			bw.newLine();
+		}
+
 		Set<EFEdge> edgesSet = (Set<EFEdge>) _graph.edgeSet();
 		
 		for (EFEdge efEdge : edgesSet) {
-			System.out.println(efEdge.formatted());
+			bw.write(efEdge.formatted());
+			bw.newLine();
 		}
+
+		bw.close();
 	}
 
 	/**
 	 * Create the header based on the porperty code.
 	 *
-	 * @param propertyCode
 	 */
 	private void createHeader(int propertyCode) {
 		switch (propertyCode) {

@@ -1,8 +1,11 @@
 package de.haw.informatik.tools;
 
 import de.haw.informatik.datatypes.EFDefaultEdge;
+import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.datatypes.EFWeightedEdge;
+import org.jgrapht.Graph;
+import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.*;
 
 import java.io.File;
@@ -10,29 +13,25 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 /**
  * Reads a .graph file and extracts data to generate 
  * a JGraph ADT.
  * 
- * @author eneskaya
+ * @author eneskaya, finnmasurat
  *
  */
 public class GraphFileReader {
 
 	private Scanner	_scanner;
-	
-	private File _file;
-	
+
 	private List<String> _contentOfFile;
 	
 	private String _header;
-	
-	private List<String> _verticesAndEdges;
-	
-	private AbstractGraph<?, ?> _graph;
-	
-	
+
+	private Graph _graph;
+
 	/**
 	 * Reads a .graph file and extracts data to generate 
 	 * a JGraphT ADT.
@@ -41,25 +40,22 @@ public class GraphFileReader {
 	 * 				String representation for a path
 	 */
 	public GraphFileReader(String pathToFile) {
-		_file = new File(pathToFile);
-		
+		File file = new File(pathToFile);
+
 		try {
-			_scanner = new Scanner(_file);
+			_scanner = new Scanner(file);
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
 		
-		_contentOfFile = new ArrayList<String>();
-		
+		_contentOfFile = new ArrayList<>();
+
 		this.extractFileToArray();
-		
+
 		if (this.checkIfHeaderIsPresentAndValid()) {
 			_header = _contentOfFile.get(0);
+			_contentOfFile.remove(0);
 		}
-		
-		_verticesAndEdges = new ArrayList<String>();
-		
-		this.cleanUp();
 	}
 	
 	/**
@@ -70,6 +66,85 @@ public class GraphFileReader {
 		while(_scanner.hasNextLine()) {
 			_contentOfFile.add(_scanner.nextLine());
 		}
+
+		List<String> temporary = new ArrayList<>();
+
+		for (String s : _contentOfFile) {
+			if (!s.equals("")) {
+				temporary.add(s);
+			}
+		}
+
+		_contentOfFile = temporary;
+	}
+
+	/**
+	 * 
+	 *
+	 * @param graph
+	 */
+	private void parse(Graph graph) {
+
+		Scanner scanner;
+		Pattern pattern = Pattern.compile("[:\\s,]+");
+
+		switch (this.getGraphProperties()) {
+
+			case 0:
+			case 1:
+			case 3:
+			case 5:
+
+				for (String s : _contentOfFile) {
+
+					scanner = new Scanner(s);
+					scanner.useDelimiter(pattern);
+
+					EFVertex firstVertex = new EFVertex(scanner.next());
+					graph.addVertex(firstVertex);
+
+					if (scanner.hasNext()) {
+						EFVertex secondVertex = new EFVertex(scanner.next());
+						graph.addVertex(secondVertex);
+						EFEdge e = (EFEdge) graph.addEdge(firstVertex, secondVertex);
+
+						if(scanner.hasNextInt()) {
+							((WeightedGraph) graph).setEdgeWeight(e, scanner.nextInt());
+						}
+					}
+				}
+
+				break;
+
+			case 2:
+			case 4:
+			case 6:
+			case 7:
+
+				for (String s : _contentOfFile) {
+
+					scanner = new Scanner(s);
+					scanner.useDelimiter(pattern);
+
+					EFVertex firstVertex = new EFVertex(scanner.next(), scanner.nextInt());
+					graph.addVertex(firstVertex);
+
+					if (scanner.hasNext()) {
+						EFVertex secondVertex = new EFVertex(scanner.next(), scanner.nextInt());
+						graph.addVertex(secondVertex);
+						EFEdge e = (EFEdge) graph.addEdge(firstVertex, secondVertex);
+
+						if(scanner.hasNextInt()) {
+							((WeightedGraph) graph).setEdgeWeight(e, scanner.nextInt());
+						}
+					}
+				}
+
+				break;
+		}
+
+		_graph = graph;
+
 	}
 	
 	/**
@@ -95,7 +170,7 @@ public class GraphFileReader {
 	 */
 	public int getGraphProperties() {
 				
-		if (this.checkIfHeaderIsPresentAndValid()) {
+		if (_header != null) {
 			
 			// Put the attributes from the header in an array
 			String[] properties = _header.split(" ");
@@ -147,281 +222,52 @@ public class GraphFileReader {
 		// undirected
 		return 0;
 	}
+
 	
 	/**
-	 * Remove the header and empty lines from _contentOfFile
-	 * and puts it into _verticesAndEdges array list.
-	 * 
-	 */
-	private void cleanUp() {		
-		
-		for (int i = 0; i < _contentOfFile.size(); i++) {
-			
-			if (_contentOfFile.get(i).equals("")) {
-				continue;
-			}
-			
-			_verticesAndEdges.add(_contentOfFile.get(i).replaceAll("\\s+", ""));
-		}
-		
-		if (this.checkIfHeaderIsPresentAndValid()) {
-			_verticesAndEdges.remove(0);
-		}
-	}
-	
-	/**
-	 * Call the method based on attribute code of header.
+	 * Create the graph based on attribute code of header.
 	 * 
 	 */
 	private void createGraph() {
 		
 		int graphAttributeCode = this.getGraphProperties();
-				
+
+		AbstractGraph<EFVertex, ?> graph;
+
 		switch (graphAttributeCode) {
-			
 			case 0:
-				this.createUndirectedGraph();
+			case 2:
+				graph = new Pseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
+				this.parse(graph);
 				break;
 				
 			case 1:
-				this.createDirectedGraph();
-				break;
-
-			case 2:
-				this.createAttributedGraph();
-				break;
-				
-			case 3:
-				this.createWeightedGraph();
-				break;
-		
 			case 4:
-				this.createDirectedAttributedGraph();
+				graph = new DirectedPseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
+				this.parse(graph);
 				break;
-				
-			case 5:
-				this.createDirectedWeightedGraph();
-				break;
-				
-			case 6:
-				this.createDirectedAttributedWeightedGraph();
-				break;
-				
+
+			case 3:
 			case 7:
-				this.createAttributedWeightedGraph();
+				graph = new WeightedPseudograph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
+				this.parse(graph);
+				break;
+
+			case 5:
+			case 6:
+				graph = new DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
+				this.parse(graph);
 				break;
 		}
 	}
-	
-	// TODO Extract to other methods!
-	
-	private void createUndirectedGraph() {		
-		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
-				new Pseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			EFVertex knoten1 = new EFVertex(v[0]);
-			EFVertex knoten2 = new EFVertex(v[1]);
-			
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
-			
-			graph.addEdge(knoten1, knoten2);
-		}
-		
-		_graph = graph;
-	}
-	
-	private void createDirectedGraph() {
-		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
-				new DirectedPseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			EFVertex knoten1 = new EFVertex(v[0]);
-			EFVertex knoten2 = new EFVertex(v[1]);
-			
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
-			
-			graph.addEdge(knoten1, knoten2);
-		}
-		
-		_graph = graph;
-	}
-	
-	private void createAttributedGraph() {
-		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
-				new Pseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			String[] v1 = v[0].split(":");
-			String[] v2 = v[1].split(":");
-			
-			EFVertex knoten1 = new EFVertex(v1[0], Integer.parseInt(v1[1]));
-			EFVertex knoten2 = new EFVertex(v2[0], Integer.parseInt(v2[1]));
-			
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
 
-			graph.addEdge(knoten1, knoten2);
-		}
-		
-		_graph = graph;
-	}
-	
-	private void createWeightedGraph() {
-		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
-				new WeightedPseudograph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			double weight = Double.valueOf(v[1].split("::")[1]);
-			
-			EFVertex knoten1 = new EFVertex(v[0]);
-			EFVertex knoten2 = new EFVertex(v[1]);
-			
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
-						
-			EFWeightedEdge edge = graph.addEdge(knoten1, knoten1);
-			
-			((WeightedPseudograph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
-		}
 
-		_graph = graph;
-	}
-	
-	private void createDirectedWeightedGraph() {
-		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
-				new DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			double weight = Double.valueOf(v[1].split("::")[1]);
-			
-			EFVertex knoten1 = new EFVertex(v[0]);
-			EFVertex knoten2 = new EFVertex(v[1].split("::")[0]);
-			
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
-						
-			EFWeightedEdge edge = graph.addEdge(knoten1, knoten2);
-			
-			((DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
-		}
-
-		_graph = graph;
-	}
-	
-	private void createDirectedAttributedGraph() {
-		AbstractGraph<EFVertex, EFDefaultEdge> graph = 
-				new DirectedPseudograph<EFVertex, EFDefaultEdge>(EFDefaultEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			String[] v1 = v[0].split(":");
-			String[] v2 = v[1].split(":");
-			
-			EFVertex knoten1 = new EFVertex(v1[0], Integer.parseInt(v1[1]));
-			EFVertex knoten2 = new EFVertex(v2[0], Integer.parseInt(v2[1]));
-			
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
-
-			graph.addEdge(knoten1, knoten2);
-		}
-		
-		_graph = graph;
-	}
-	
-	private void createAttributedWeightedGraph() {
-		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
-				new WeightedPseudograph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			double weight = Double.valueOf(v[1].split("::")[1]);
-			
-			EFVertex knoten1 = 
-					new EFVertex(v[0].split(":")[0], Integer.parseInt(v[0].split(":")[1]));
-			
-			EFVertex knoten2 = 
-					new EFVertex(v[1].split(":")[0], Integer.parseInt( v[1].split(":")[1].split("::")[0]));
-
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
-			
-			EFWeightedEdge edge = graph.addEdge(knoten1, knoten2);
-			
-			((WeightedPseudograph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
-		}
-
-		_graph = graph;
-	}
-	
-	private void createDirectedAttributedWeightedGraph() {
-		AbstractGraph<EFVertex, EFWeightedEdge> graph = 
-				new DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
-		
-		for (int i = 0; i < _verticesAndEdges.size(); i++) {
-			
-			String[] v = _verticesAndEdges.get(i).split(",");
-			
-			double weight = Double.valueOf(v[1].split("::")[1]);
-			
-			EFVertex knoten1 = 
-					new EFVertex(v[0].split(":")[0], Integer.parseInt(v[0].split(":")[1]));
-			
-			EFVertex knoten2 = 
-					new EFVertex(v[1].split(":")[0], Integer.parseInt( v[1].split(":")[1].split("::")[0]));
-
-			
-			graph.addVertex(knoten1);
-			graph.addVertex(knoten2);
-
-			
-			EFWeightedEdge edge = graph.addEdge(knoten1, knoten2);
-			
-			((DefaultDirectedWeightedGraph<EFVertex, EFWeightedEdge>) graph).setEdgeWeight(edge, weight);
-		}
-
-		_graph = graph;
-	}
-	
-	
-	/**
-	 * Returns the contents of a .graph file in an array
-	 * 
-	 * @return ArrayList<String> 
-	 * 			Contents of the file in an array.
-	 */
-	public List<String> getArrayFromFile() {
-		return _contentOfFile;
-	}
-	
 	/**
 	 * Get the graph.
 	 * 
 	 * @return Instance of a Graph
 	 */
-	public AbstractGraph<?, ?> getGraph() {
+	public Graph getGraph() {
 		
 		this.createGraph();
 		return _graph;
