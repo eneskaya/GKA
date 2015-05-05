@@ -2,11 +2,13 @@ package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
+
 import org.jgrapht.Graph;
 
 import java.util.*;
 
 public class Dijkstra {
+
 
     /**
      * Computes the shortest path for two given vertices and a graph.
@@ -17,7 +19,6 @@ public class Dijkstra {
      *          The source vertex
      */
     public static void computePath(Graph graph, EFVertex source) {
-
         source.minimalDistance = 0.0;
         PriorityQueue<EFVertex> leQueue = new PriorityQueue<>();
         leQueue.add(source);
@@ -42,17 +43,33 @@ public class Dijkstra {
         }
     }
 
-    public static List<EFVertex> getShortestPathTo(EFVertex target)
+    public static String getShortestPathTo(EFVertex target)
     {
-        List<EFVertex> path = new ArrayList<>();
+        String path = "";
 
         for (EFVertex v = target; v != null; v = v.predecessor) {
-            path.add(v);
+        	
+       	path = " --> " + v.toString() + path;    	
+        	       	
         }
-
-        Collections.reverse(path);
 
         return path;
     }
 
 }
+
+// to startup    jahudii
+//Set<EFVertex> set = (Set<EFVertex>) graph.vertexSet();
+//
+//Object[] a = set.toArray();
+//
+//EFVertex source = (EFVertex) a[6]; // Kiel
+//EFVertex target = (EFVertex) a[1]; // Hamburg
+//
+//Dijkstra.computePath(graph, source);
+//
+//System.out.println(Dijkstra.getShortestPathTo(target));
+
+
+
+
