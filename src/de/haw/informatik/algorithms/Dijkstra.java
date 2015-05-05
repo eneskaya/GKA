@@ -9,7 +9,6 @@ import java.util.*;
 
 public class Dijkstra {
 
-
     /**
      * Computes the shortest path for two given vertices and a graph.
      *
@@ -38,24 +37,29 @@ public class Dijkstra {
                     target.predecessor = currentVertex;
                     leQueue.add(target);
                 }
-
             }
         }
     }
 
-    public static String getShortestPathTo(EFVertex target)
-    {
+    /**
+     * Returns the shortest path to the given target vertex.
+     * Already formatted output.
+     *
+     * @param target
+     *          The target EFVertex
+     * @return
+     *          Formatted path representation
+     */
+    public static String getShortestPathTo(EFVertex target) {
         String path = "";
 
         for (EFVertex v = target; v != null; v = v.predecessor) {
         	
-       	path = " --> " + v.toString() + path;    	
-        	       	
+       	    path = " --> " + v.toString() + path;
         }
 
         return path;
     }
-
 }
 
 // to startup    jahudii

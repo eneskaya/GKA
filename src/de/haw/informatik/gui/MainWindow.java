@@ -7,9 +7,13 @@ public class MainWindow {
 
 	private JFrame _frame;
 	private JPanel _panelContainer;
-	private JMenuBar _menuBar;
-	private JMenuItem _menuItem;
-	private JMenu _menu;
+
+	JMenuItem fileOpen;
+	JMenuItem fileSave;
+
+	JMenuItem algoBFS;
+	JMenuItem algoDijkstra;
+	JMenuItem algoAStar;
 
 	public MainWindow(String title) {
 		_frame = new JFrame(title);
@@ -19,23 +23,69 @@ public class MainWindow {
 		_panelContainer = new JPanel();
 		_panelContainer.setLayout(new BorderLayout());
 
-		_menuBar = new JMenuBar();
-		_menu = new JMenu("Datei");
-		
-		_menuBar.add(_menu);
-
-		_menuItem = new JMenuItem();
-
-		_menuBar.add(_menuItem);
-		
+		initMenu();
 		
 		_frame.add(_panelContainer);
-		_frame.setJMenuBar(_menuBar);
 		_frame.setVisible(true);
 	}
 
 	/**
+	 * Initialize the Menu.
 	 *
+	 */
+	private void initMenu() {
+		JMenuBar menuBar = new JMenuBar();
+		JMenu fileMenu = new JMenu("Graphen");
+
+		fileOpen = new JMenuItem("Graph laden...");
+		fileSave = new JMenuItem("Graph speichern...");
+
+		fileMenu.add(fileOpen);
+		fileMenu.add(fileSave);
+		fileMenu.addSeparator();
+		fileMenu.add("Bitte nur .graph Dateien");
+
+		menuBar.add(fileMenu);
+
+		JMenu algoMenu = new JMenu("Algorithmen");
+
+		algoBFS = new JMenuItem("Breadth First Search");
+		algoDijkstra = new JMenuItem("Dijkstra Shortest Path");
+		algoAStar = new JMenuItem("A*");
+
+		algoMenu.add(algoBFS);
+		algoMenu.add(algoDijkstra);
+		algoMenu.add(algoAStar);
+
+		menuBar.add(algoMenu);
+
+		_frame.setJMenuBar(menuBar);
+	}
+
+
+	public JMenuItem getFileOpenMenuItem() {
+		return fileOpen;
+	}
+
+	public  JMenuItem getFileSaveMenuItem() {
+		return fileSave;
+	}
+
+
+	public JMenuItem getAlgoBFSMenuItem() {
+		return algoBFS;
+	}
+
+	public JMenuItem getAlgoDijkstraMenuItem() {
+		return algoDijkstra;
+	}
+
+	public JMenuItem getAlgoAStarMenuItem() {
+		return algoAStar;
+	}
+
+	/**
+	 * Return the JPanelContainer in which the Graph should be drawn.
 	 *
 	 * @return JPanel
 	 * 			the panelContainer
@@ -43,7 +93,5 @@ public class MainWindow {
 	public JPanel getPanelContainer() {
 		return _panelContainer;
 	}
-	
-	
-	
+
 }

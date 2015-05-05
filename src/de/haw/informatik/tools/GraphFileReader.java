@@ -109,7 +109,7 @@ public class GraphFileReader {
 						EFEdge e = (EFEdge) graph.addEdge(firstVertex, secondVertex);
 
 						if(scanner.hasNextInt()) {
-							((WeightedGraph) graph).setEdgeWeight(e, scanner.nextInt());
+							((WeightedGraph) graph).setEdgeWeight(e, Math.abs(scanner.nextInt()));
 						}
 					}
 				}

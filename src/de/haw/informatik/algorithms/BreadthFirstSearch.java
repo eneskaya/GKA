@@ -16,6 +16,13 @@ public class BreadthFirstSearch {
 
     private Set<EFVertex> _allVertices;
 
+    /**
+     * Computes the shortest path for two given vertices and a graph.
+     *
+     * @param graph
+     * @param source
+     * @param target
+     */
     public BreadthFirstSearch(Graph<EFVertex, EFEdge> graph, EFVertex source, EFVertex target) {
         _graph = graph;
         _source = source;
@@ -29,8 +36,8 @@ public class BreadthFirstSearch {
         if (_graph != null && _source != null && _target != null && !_source.equals(_target)
                 && _graph.containsVertex(_source) && _graph.containsVertex(_target))
         {
-            Queue<EFVertex> queue = new LinkedList<EFVertex>();
-            Map<EFVertex, EFVertex> map = new HashMap<EFVertex, EFVertex>();
+            Queue<EFVertex> queue = new LinkedList<>();
+            Map<EFVertex, EFVertex> map = new HashMap<>();
 
             Set<EFEdge> edges;
 
@@ -80,6 +87,6 @@ public class BreadthFirstSearch {
             }
         }
 
-        return "Vallah, hat nix geklappt.";
+        return "Da ist was schiefgegangen.";
     }
 }

@@ -39,9 +39,9 @@ public class GraphFileWriter {
 	 * Writes the given Graph to a file in the file system.
 	 *
 	 * @param pathToFile
-	 * 			The path to the file. Absolute or relative. With .graph extension
+	 * 			The name of the file.
 	 */
-	public void write(String pathToFile) throws IOException {
+	public File write(String pathToFile) throws IOException {
 
 		File file = new File(pathToFile);
 
@@ -67,6 +67,8 @@ public class GraphFileWriter {
 		}
 
 		bw.close();
+
+		return file;
 	}
 
 	/**
