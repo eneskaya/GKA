@@ -67,7 +67,7 @@ public class BreadthFirstSearch {
 
                 int countEdges = 0;
 
-                while (!current.equals(_target)) {
+                while (!current.equals(_source)) {
                     path = " --> " + current.toString() + path;
                     current = map.get(current);
                     countEdges++;
