@@ -15,6 +15,8 @@ public class MainWindow {
 	JMenuItem algoDijkstra;
 	JMenuItem algoAStar;
 
+	JMenuItem randomGraphGenerate;
+
 	public MainWindow(String title) {
 		_frame = new JFrame(title);
 		_frame.setSize(1200, 900);
@@ -59,6 +61,13 @@ public class MainWindow {
 
 		menuBar.add(algoMenu);
 
+		JMenu randomMenu = new JMenu("Random");
+
+		randomGraphGenerate = new JMenuItem("Zufälligen Graph erstellen...");
+
+		randomMenu.add(randomGraphGenerate);
+		menuBar.add(randomMenu);
+
 		_frame.setJMenuBar(menuBar);
 	}
 
@@ -71,7 +80,6 @@ public class MainWindow {
 		return fileSave;
 	}
 
-
 	public JMenuItem getAlgoBFSMenuItem() {
 		return algoBFS;
 	}
@@ -82,6 +90,10 @@ public class MainWindow {
 
 	public JMenuItem getAlgoAStarMenuItem() {
 		return algoAStar;
+	}
+
+	public JMenuItem getRandomGraphGenerateItem() {
+		return randomGraphGenerate;
 	}
 
 	/**

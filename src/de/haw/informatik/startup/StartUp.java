@@ -1,12 +1,16 @@
 package de.haw.informatik.startup;
 
+import de.haw.informatik.algorithms.AStar;
 import de.haw.informatik.algorithms.BreadthFirstSearch;
+import de.haw.informatik.algorithms.Dijkstra;
 import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.gui.GenericDialog;
 import de.haw.informatik.gui.FileChooser;
+import de.haw.informatik.gui.GenericDialog;
 import de.haw.informatik.gui.MainWindow;
+import de.haw.informatik.gui.RandomGenerateDialog;
 import de.haw.informatik.tools.GraphFileReader;
 import de.haw.informatik.tools.GraphFileWriter;
+import de.haw.informatik.tools.GraphRandomGenerator;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
@@ -15,7 +19,9 @@ import org.jgrapht.ext.JGraphModelAdapter;
 
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class StartUp  {
 
@@ -24,11 +30,14 @@ public class StartUp  {
 	private static GraphFileReader _reader;
 	private static GraphFileWriter _writer;
 	private static JGraphModelAdapter _adapter;
+	private static int _propertyCodeForActualGraph;
 
 	public static void main(String[] args) {
 		_fc = new FileChooser();
 		registerUIActions();
 	}
+
+//////////////////////////// METHODS ////////////////////////////
 
 	private static void registerUIActions() {
 		MainWindow mw = new MainWindow("Graphentheorie");
@@ -44,6 +53,7 @@ public class StartUp  {
 
 				_reader = new GraphFileReader(result);
 				_graph = _reader.getGraph();
+				_propertyCodeForActualGraph = _reader.getGraphProperties();
 
 				Set<EFVertex> vertices = _graph.vertexSet();
 				_adapter = new JGraphModelAdapter(_graph);
@@ -73,7 +83,8 @@ public class StartUp  {
 			String result = _fc.save();
 
 			if(!result.equals("Kein Speicherort ausgewählt.")) {
-				_writer = new GraphFileWriter(_graph, _reader.getGraphProperties());
+				// TODO
+				_writer = new GraphFileWriter(_graph, _propertyCodeForActualGraph);
 
 				try {
 					_writer.write(result);
@@ -90,16 +101,17 @@ public class StartUp  {
 			GenericDialog genericDialog = new GenericDialog();
 
 			for (EFVertex v : vertexSet) {
-				genericDialog.getComboBox1().addItem(v.toString());
-				genericDialog.getComboBox2().addItem(v.toString());
+				genericDialog.getComboBox1().addItem(v);
+				genericDialog.getComboBox2().addItem(v);
 			}
 
 			genericDialog.getButtonOK().addActionListener(e1 -> {
 
-				String source = (String) genericDialog.getComboBox1().getSelectedItem();
-				String target = (String) genericDialog.getComboBox2().getSelectedItem();
+				EFVertex source = (EFVertex) genericDialog.getComboBox1().getSelectedItem();
+				EFVertex target = (EFVertex) genericDialog.getComboBox2().getSelectedItem();
 
-				BreadthFirstSearch bfss = new BreadthFirstSearch(_graph, new EFVertex(source), new EFVertex(target));
+				BreadthFirstSearch bfss =
+						new BreadthFirstSearch(_graph, source, target);
 
 				genericDialog.getTextArea1().setText("");
 				genericDialog.getTextArea1().append(bfss.doSearch());
@@ -116,13 +128,24 @@ public class StartUp  {
 			GenericDialog genericDialog = new GenericDialog();
 
 			for (EFVertex v : vertexSet) {
-				genericDialog.getComboBox1().addItem(v.getName());
-				genericDialog.getComboBox2().addItem(v.getName());
+				genericDialog.getComboBox1().addItem(v);
+				genericDialog.getComboBox2().addItem(v);
 			}
 
-			//ArrayList<EFVertex> vertexArray = new ArrayList<EFVertex>(Arrays.asList(vertexSet.toArray()));
-
 			genericDialog.getButtonOK().addActionListener(e1 -> {
+
+				EFVertex source = (EFVertex) genericDialog.getComboBox1().getSelectedItem();
+				EFVertex target = (EFVertex) genericDialog.getComboBox2().getSelectedItem();
+
+				Dijkstra.computePath(_graph, source);
+
+				genericDialog.getTextArea1().setText("");
+
+				genericDialog.getTextArea1().append(source.toString());
+				genericDialog.getTextArea1().append(target.toString());
+
+				genericDialog.getTextArea1().append(Dijkstra.getShortestPathTo(target));
+
 			});
 
 			genericDialog.setVisible(true);
@@ -131,7 +154,72 @@ public class StartUp  {
 
 		// A*
 		mw.getAlgoAStarMenuItem().addActionListener(e -> {
-			// TODO
+			Set<EFVertex> vertexSet = _graph.vertexSet();
+
+			GenericDialog genericDialog = new GenericDialog();
+
+			for (EFVertex v : vertexSet) {
+				genericDialog.getComboBox1().addItem(v);
+				genericDialog.getComboBox2().addItem(v);
+			}
+
+			genericDialog.getButtonOK().addActionListener(e1 -> {
+
+				EFVertex source = (EFVertex) genericDialog.getComboBox1().getSelectedItem();
+				EFVertex target = (EFVertex) genericDialog.getComboBox2().getSelectedItem();
+
+				AStar.computePath(_graph, source);
+
+				genericDialog.getTextArea1().setText("");
+
+				genericDialog.getTextArea1().append(source.toString());
+				genericDialog.getTextArea1().append(target.toString());
+
+				genericDialog.getTextArea1().append(AStar.getShortestPathTo(target));
+
+			});
+
+			genericDialog.setVisible(true);
+		});
+
+		mw.getRandomGraphGenerateItem().addActionListener(e -> {
+
+			RandomGenerateDialog rg = new RandomGenerateDialog();
+
+			rg.getButtonOK().addActionListener(e1 -> {
+				_graph = GraphRandomGenerator
+						.getRandomGraph(Integer.parseInt(rg.getTextField1().getText()),
+								Integer.parseInt(rg.getTextField2().getText()));
+
+				// Attributed, weighted
+				_propertyCodeForActualGraph = 7;
+
+				mw.getPanelContainer().removeAll();
+
+				Set<EFVertex> vertices = _graph.vertexSet();
+				_adapter = new JGraphModelAdapter(_graph);
+
+				int x, y = 0;
+
+				for (EFVertex v : vertices) {
+					x = (int) (Math.random() * 900);
+					y = (int) (Math.random() * 500);
+					positionVertexAt(v, x, y);
+				}
+
+				JGraph jgraph = new JGraph(_adapter);
+
+				jgraph.setGridEnabled(true);
+				jgraph.setAntiAliased(true);
+				jgraph.setBendable(true);
+
+				mw.getPanelContainer().add(jgraph);
+				mw.getPanelContainer().updateUI();
+
+				rg.dispose();
+			});
+
+			rg.setVisible(true);
 		});
 	}
 

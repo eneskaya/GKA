@@ -51,7 +51,6 @@ public class Dijkstra {
 					
 					else if (distanceFromCurrentToTarget < _map.get(targetVertex2)){
 						leQueue.remove(targetVertex2);
-					
 
 						_map.replace(targetVertex2, distanceFromCurrentToTarget);
 						targetVertex2.predecessor = currentVertex;
