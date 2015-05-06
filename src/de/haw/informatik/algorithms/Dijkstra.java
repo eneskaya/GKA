@@ -61,19 +61,3 @@ public class Dijkstra {
         return path;
     }
 }
-
-// to startup    jahudii
-//Set<EFVertex> set = (Set<EFVertex>) graph.vertexSet();
-//
-//Object[] a = set.toArray();
-//
-//EFVertex source = (EFVertex) a[6]; // Kiel
-//EFVertex target = (EFVertex) a[1]; // Hamburg
-//
-//Dijkstra.computePath(graph, source);
-//
-//System.out.println(Dijkstra.getShortestPathTo(target));
-
-
-
-
