@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class BFS extends JDialog {
+public class GenericDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -19,9 +19,9 @@ public class BFS extends JDialog {
 
     private JTextArea textArea1;
 
-    public BFS() {
+    public GenericDialog() {
 
-        this.setSize(300, 600);
+        this.setSize(500, 600);
 
         setContentPane(contentPane);
         setModal(true);
@@ -54,10 +54,6 @@ public class BFS extends JDialog {
 
     public JButton getButtonOK() {
         return buttonOK;
-    }
-
-    public JButton getButtonCancel() {
-        return buttonCancel;
     }
 
     public JComboBox getComboBox1() {

@@ -2,17 +2,20 @@ package de.haw.informatik.startup;
 
 import de.haw.informatik.algorithms.BreadthFirstSearch;
 import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.gui.BFS;
+import de.haw.informatik.gui.GenericDialog;
 import de.haw.informatik.gui.FileChooser;
 import de.haw.informatik.gui.MainWindow;
 import de.haw.informatik.tools.GraphFileReader;
 import de.haw.informatik.tools.GraphFileWriter;
 import org.jgraph.JGraph;
+import org.jgraph.graph.DefaultGraphCell;
+import org.jgraph.graph.GraphConstants;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphModelAdapter;
 
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
-import java.util.Set;
+import java.util.*;
 
 public class StartUp  {
 
@@ -20,6 +23,7 @@ public class StartUp  {
 	private static FileChooser _fc;
 	private static GraphFileReader _reader;
 	private static GraphFileWriter _writer;
+	private static JGraphModelAdapter _adapter;
 
 	public static void main(String[] args) {
 		_fc = new FileChooser();
@@ -41,8 +45,18 @@ public class StartUp  {
 				_reader = new GraphFileReader(result);
 				_graph = _reader.getGraph();
 
+				Set<EFVertex> vertices = _graph.vertexSet();
+				_adapter = new JGraphModelAdapter(_graph);
 
-				JGraph jgraph = new JGraph(new JGraphModelAdapter(_graph));
+				int x, y = 0;
+
+				for (EFVertex v : vertices) {
+					x = (int) (Math.random() * 900);
+					y = (int) (Math.random() * 900);
+					positionVertexAt(v, x, y);
+				}
+
+				JGraph jgraph = new JGraph(_adapter);
 
 				jgraph.setGridEnabled(true);
 				jgraph.setAntiAliased(true);
@@ -69,39 +83,78 @@ public class StartUp  {
 			}
 		});
 
-		// BFS
+		// GenericDialog
 		mw.getAlgoBFSMenuItem().addActionListener(e -> {
 			Set<EFVertex> vertexSet = _graph.vertexSet();
 
-			BFS bfs = new BFS();
+			GenericDialog genericDialog = new GenericDialog();
 
 			for (EFVertex v : vertexSet) {
-				bfs.getComboBox1().addItem(v.toString());
-				bfs.getComboBox2().addItem(v.toString());
+				genericDialog.getComboBox1().addItem(v.toString());
+				genericDialog.getComboBox2().addItem(v.toString());
 			}
 
-			bfs.getButtonOK().addActionListener(e1 -> {
+			genericDialog.getButtonOK().addActionListener(e1 -> {
 
-				String source = (String) bfs.getComboBox1().getSelectedItem();
-				String target = (String) bfs.getComboBox2().getSelectedItem();
+				String source = (String) genericDialog.getComboBox1().getSelectedItem();
+				String target = (String) genericDialog.getComboBox2().getSelectedItem();
 
 				BreadthFirstSearch bfss = new BreadthFirstSearch(_graph, new EFVertex(source), new EFVertex(target));
 
-				bfs.getTextArea1().append(bfss.doSearch());
+				genericDialog.getTextArea1().setText("");
+				genericDialog.getTextArea1().append(bfss.doSearch());
 			});
 
-			bfs.setVisible(true);
+			genericDialog.setVisible(true);
 
 		});
 
 		// Dijkstra
 		mw.getAlgoDijkstraMenuItem().addActionListener(e -> {
+			Set<EFVertex> vertexSet = _graph.vertexSet();
+
+			GenericDialog genericDialog = new GenericDialog();
+
+			for (EFVertex v : vertexSet) {
+				genericDialog.getComboBox1().addItem(v.getName());
+				genericDialog.getComboBox2().addItem(v.getName());
+			}
+
+			//ArrayList<EFVertex> vertexArray = new ArrayList<EFVertex>(Arrays.asList(vertexSet.toArray()));
+
+			genericDialog.getButtonOK().addActionListener(e1 -> {
+			});
+
+			genericDialog.setVisible(true);
 
 		});
 
 		// A*
 		mw.getAlgoAStarMenuItem().addActionListener(e -> {
-
+			// TODO
 		});
+	}
+
+	/**
+	 * Randomly position a vertex.
+	 *
+	 * @param vertex
+	 * @param x
+	 * @param y
+	 */
+	private static void positionVertexAt(Object vertex, int x, int y)
+	{
+		DefaultGraphCell cell = _adapter.getVertexCell(vertex);
+		Map<?, ?> attr = cell.getAttributes();
+		Rectangle2D b = GraphConstants.getBounds(attr);
+
+		Rectangle2D rect = new Rectangle2D.Double(x, y, b.getWidth(),
+				b.getHeight());
+
+		GraphConstants.setBounds(attr, rect);
+
+		Map<DefaultGraphCell, Map<?, ?>> cellAttr = new HashMap<>();
+		cellAttr.put(cell, attr);
+		_adapter.edit(cellAttr, null, null, null);
 	}
 }

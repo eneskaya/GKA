@@ -17,7 +17,7 @@ public class MainWindow {
 
 	public MainWindow(String title) {
 		_frame = new JFrame(title);
-		_frame.setSize(1200, 600);
+		_frame.setSize(1200, 900);
 		_frame.setResizable(false);
 		
 		_panelContainer = new JPanel();
