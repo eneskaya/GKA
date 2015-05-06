@@ -78,11 +78,6 @@ public class GraphFileReader {
 		_contentOfFile = temporary;
 	}
 
-	/**
-	 * 
-	 *
-	 * @param graph
-	 */
 	private void parse(Graph graph) {
 
 		Scanner scanner;
@@ -108,7 +103,7 @@ public class GraphFileReader {
 						graph.addVertex(secondVertex);
 						EFEdge e = (EFEdge) graph.addEdge(firstVertex, secondVertex);
 
-						if(scanner.hasNextInt()) {
+						if(scanner.hasNextInt() && e != null) {
 							((WeightedGraph) graph).setEdgeWeight(e, Math.abs(scanner.nextInt()));
 						}
 					}
@@ -146,13 +141,8 @@ public class GraphFileReader {
 		_graph = graph;
 
 	}
-	
-	/**
-	 * Checks if the file has a header with attributes for the graph.
-	 * 
-	 * @return true if, and only if, a header is present
-	 */
-	public boolean checkIfHeaderIsPresentAndValid() {
+
+	private boolean checkIfHeaderIsPresentAndValid() {
 		return _contentOfFile.get(0).matches("(#(directed|weighted|attributed) ?)+");
 	}
 	
@@ -261,7 +251,6 @@ public class GraphFileReader {
 		}
 	}
 
-
 	/**
 	 * Get the graph.
 	 * 
@@ -272,5 +261,4 @@ public class GraphFileReader {
 		this.createGraph();
 		return _graph;
 	}
-	
 }

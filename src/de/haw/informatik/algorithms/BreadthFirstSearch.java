@@ -14,8 +14,6 @@ public class BreadthFirstSearch {
 
     private EFVertex _source, _target;
 
-    private Set<EFVertex> _allVertices;
-
     /**
      * Computes the shortest path for two given vertices and a graph.
      *
@@ -27,8 +25,6 @@ public class BreadthFirstSearch {
         _graph = graph;
         _source = source;
         _target = target;
-
-        _allVertices = graph.vertexSet();
     }
 
     public String doSearch() {
@@ -83,10 +79,10 @@ public class BreadthFirstSearch {
                 return "Der Kürzeste Weg von " + _source.toString()
                         + " nach " + _target.toString() + " ist:\n"
                         + _source.toString() + path + "\n"
-                        + "Dies erfolgt über " + countEdges + " Kante(n).";
+                        + "über " + countEdges + " Kante(n).";
             }
         }
 
-        return "Da ist was schiefgegangen.";
+        return "Kein Ergebnis.";
     }
 }

@@ -32,16 +32,8 @@ public class StartUp  {
 
 	public static void main(String[] args) {
 
-//		_fc = new FileChooser();
-//		registerUIActions();
-
-        _graph = (new GraphFileReader("bsp/bsp3.graph")).getGraph();
-
-        Object[] a = _graph.vertexSet().toArray();
-
-        Dijkstra.computePath(_graph, (EFVertex) a[2]);
-
-        System.out.println(Dijkstra.getShortestPathTo((EFVertex) a[16]));
+		_fc = new FileChooser();
+		registerUIActions();
 
 	}
 
@@ -178,9 +170,6 @@ public class StartUp  {
             AStar.computePath(_graph, source);
 
             algorithmsDialog.getTextArea1().setText("");
-
-            algorithmsDialog.getTextArea1().append(source.toString());
-            algorithmsDialog.getTextArea1().append(target.toString());
 
             algorithmsDialog.getTextArea1().append(AStar.getShortestPathTo(target));
 

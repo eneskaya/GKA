@@ -11,8 +11,8 @@ import java.util.*;
 
 public class AStar {
 
-	public static String _source;
-	public static String _target;
+	public static EFVertex _source;
+	public static EFVertex _target;
 	public static Map<EFVertex, Double> _map = new HashMap<>();
 
 	/**
@@ -24,12 +24,23 @@ public class AStar {
 	 *            The source vertex
 	 */
 	public static void computePath(Graph graph, EFVertex source) {
-		_source = source.toString();
-		PriorityQueue<EFVertex> leQueue = new PriorityQueue<>();
+		_source = source;
+
+		PriorityQueue<EFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
+            return Double.compare(_map.get(o1) + o1.getAttributeValue(), _map.get(o2) + o2.getAttributeValue());
+        });
+
+		Set<EFVertex> vertices = graph.vertexSet();
+
+		for (EFVertex v : vertices) {
+			_map.put(v, Double.POSITIVE_INFINITY);
+		}
+
 		leQueue.add(source);
 		_map.put(source, 0.0);
 
 		while (!leQueue.isEmpty()) {
+
 			EFVertex currentVertex = leQueue.poll();
 
 			for (EFEdge e : (Set<EFEdge>) graph.edgesOf(currentVertex)) {
@@ -38,18 +49,16 @@ public class AStar {
 				double distanceFromCurrentToTarget = _map.get(currentVertex)
 						+ weight;// currentVertex.minimalDistance + weight;
 				EFVertex target = (EFVertex) graph.getEdgeTarget(e);
-				
-				
 
 				if (graph instanceof WeightedPseudograph || graph instanceof Pseudograph){
-					EFVertex targetVertex2 = (EFVertex) graph.getEdgeSource(e);
 
+					EFVertex targetVertex2 = (EFVertex) graph.getEdgeSource(e);
 					
-					if (!_map.containsKey(targetVertex2)){
+					if (!_map.containsKey(targetVertex2)) {
 						_map.put(targetVertex2, distanceFromCurrentToTarget);
 					}
 					
-					else if (distanceFromCurrentToTarget < _map.get(targetVertex2)){
+					if (distanceFromCurrentToTarget < _map.get(targetVertex2)) {
 						leQueue.remove(targetVertex2);
 					
 
@@ -59,24 +68,25 @@ public class AStar {
 					}
 				}
 
-				if (!_map.containsKey(target)){
+				if (!_map.containsKey(target)) {
+
 					_map.put(target, distanceFromCurrentToTarget);
 				}
 				
-				else if (distanceFromCurrentToTarget < _map.get(target)){
+				if (distanceFromCurrentToTarget < _map.get(target)) {
+
 					leQueue.remove(target);
 					_map.replace(target, distanceFromCurrentToTarget);
 					target._predecessor = currentVertex;
 					leQueue.add(target);
-
 				}
 			}
 		}
 	}
 
 	/**
-	 * Returns the shortest path to the given target vertex. Already formatted
-	 * output.
+	 * Returns the shortest path to the given target vertex.
+	 * Already formatted output.
 	 *
 	 * @param target
 	 *            The target EFVertex
@@ -84,14 +94,14 @@ public class AStar {
 	 */
 	public static String getShortestPathTo(EFVertex target) {
 		String path = "";
-		_target = target.toString();
+		_target = target;
 		
 		for (EFVertex v = target; v != null; v = v._predecessor) {
-			path = " --> " + v.toString() + path;
+			path = " --> " + v.getName() + path;
 		}
 
-		return "Der K�rzeste Weg von " + _source.toString() + " nach "
-				+ _target.toString() + " ist:\n" + _source.toString() + path
+		return "Der Kürzeste Weg von " + _source.getName() + " nach "
+				+ _target.getName() + " ist:\n" + _source.getName() + path
 				+ "\n" + "Strecke: " + _map.get(target);
 	}
 }

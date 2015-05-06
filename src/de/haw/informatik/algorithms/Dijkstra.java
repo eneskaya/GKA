@@ -11,8 +11,8 @@ import java.util.*;
 
 public class Dijkstra {
 
-	public static String _source;
-	public static String _target;
+	public static EFVertex _source;
+	public static EFVertex _target;
 	public static Map<EFVertex, Double> _map = new HashMap<>();
 
 	/**
@@ -24,7 +24,7 @@ public class Dijkstra {
 	 *            The source vertex
 	 */
 	public static void computePath(Graph graph, EFVertex source) {
-		_source = source.toString();
+		_source = source;
 
 		Set<EFVertex> vertexes = graph.vertexSet();
 
@@ -32,7 +32,9 @@ public class Dijkstra {
 			_map.put(v, Double.POSITIVE_INFINITY);
 		}
 
-		PriorityQueue<EFVertex> leQueue = new PriorityQueue<>();
+		PriorityQueue<EFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
+            return Double.compare(_map.get(o1), _map.get(o2));
+        });
 
 		leQueue.add(source);
 		_map.put(source, 0.0);
@@ -89,14 +91,15 @@ public class Dijkstra {
 	 */
 	public static String getShortestPathTo(EFVertex target) {
 		String path = "";
-		_target = target.toString();
+		_target = target;
 		
 		for (EFVertex v = target; v != null; v = v._predecessor) {
-			path = " --> " + v.toString() + path;
+			path = " --> " + v.getName() + path;
 		}
 
-		return "Der Kürzeste Weg von " + _source.toString() + " nach "
-				+ _target.toString() + " ist:\n" + path
+		return "Der Kürzeste Weg von "
+				+ _source.getName() + " nach "
+				+ _target.getName() + " ist:\n" + path
 				+ "\n" + "Strecke: " + _map.get(target);
 	}
 }
