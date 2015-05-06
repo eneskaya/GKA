@@ -54,7 +54,7 @@ public class AStar {
 					
 
 						_map.replace(targetVertex2, distanceFromCurrentToTarget);
-						targetVertex2.predecessor = currentVertex;
+						targetVertex2._predecessor = currentVertex;
 						leQueue.add(targetVertex2);
 					}
 				}
@@ -66,11 +66,10 @@ public class AStar {
 				else if (distanceFromCurrentToTarget < _map.get(target)){
 					leQueue.remove(target);
 					_map.replace(target, distanceFromCurrentToTarget);
-					target.predecessor = currentVertex;
+					target._predecessor = currentVertex;
 					leQueue.add(target);
 
 				}
-
 			}
 		}
 	}
@@ -87,11 +86,11 @@ public class AStar {
 		String path = "";
 		_target = target.toString();
 		
-		for (EFVertex v = target; v != null; v = v.predecessor) {
+		for (EFVertex v = target; v != null; v = v._predecessor) {
 			path = " --> " + v.toString() + path;
 		}
 
-		return "Der Kürzeste Weg von " + _source.toString() + " nach "
+		return "Der Kï¿½rzeste Weg von " + _source.toString() + " nach "
 				+ _target.toString() + " ist:\n" + _source.toString() + path
 				+ "\n" + "Strecke: " + _map.get(target);
 	}

@@ -5,9 +5,7 @@ public class EFVertex implements Comparable<EFVertex> {
 	private String _name;
 	private int _attributeValue;
 	private boolean _attributed;
-	public EFVertex predecessor;
-
-
+	public EFVertex _predecessor;
 
 	/**
 	 * Creates an EFVertex which is attributed.
