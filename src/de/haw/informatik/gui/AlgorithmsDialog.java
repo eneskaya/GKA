@@ -5,7 +5,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-public class GenericDialog extends JDialog {
+public class AlgorithmsDialog extends JDialog {
     private JPanel contentPane;
     private JButton buttonOK;
     private JButton buttonCancel;
@@ -19,7 +19,7 @@ public class GenericDialog extends JDialog {
 
     private JTextArea textArea1;
 
-    public GenericDialog() {
+    public AlgorithmsDialog() {
 
         this.setSize(500, 600);
 

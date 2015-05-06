@@ -4,11 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
-/**
- *
- * Source: http://andrdev.blogspot.de/2011/02/simple-random-name-generator.html
- */
 public class RandomNameGenerator {
 
     private List vocals = new ArrayList();

@@ -5,7 +5,7 @@ import de.haw.informatik.algorithms.BreadthFirstSearch;
 import de.haw.informatik.algorithms.Dijkstra;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.gui.FileChooser;
-import de.haw.informatik.gui.GenericDialog;
+import de.haw.informatik.gui.AlgorithmsDialog;
 import de.haw.informatik.gui.MainWindow;
 import de.haw.informatik.gui.RandomGenerateDialog;
 import de.haw.informatik.tools.GraphFileReader;
@@ -32,8 +32,17 @@ public class StartUp  {
 
 	public static void main(String[] args) {
 
-		_fc = new FileChooser();
-		registerUIActions();
+//		_fc = new FileChooser();
+//		registerUIActions();
+
+        _graph = (new GraphFileReader("bsp/bsp3.graph")).getGraph();
+
+        Object[] a = _graph.vertexSet().toArray();
+
+        Dijkstra.computePath(_graph, (EFVertex) a[2]);
+
+        System.out.println(Dijkstra.getShortestPathTo((EFVertex) a[16]));
+
 	}
 
 	private static void registerUIActions() {
@@ -70,7 +79,7 @@ public class StartUp  {
 
             for (EFVertex v : vertices) {
                 x = (int) (Math.random() * 900);
-                y = (int) (Math.random() * 900);
+                y = (int) (Math.random() * 500);
                 positionVertexAt(v, x, y);
             }
 
@@ -103,84 +112,81 @@ public class StartUp  {
 	private static void bfsAction() {
 		Set<EFVertex> vertexSet = _graph.vertexSet();
 
-		GenericDialog genericDialog = new GenericDialog();
+		AlgorithmsDialog algorithmsDialog = new AlgorithmsDialog();
 
 		for (EFVertex v : vertexSet) {
-            genericDialog.getComboBox1().addItem(v);
-            genericDialog.getComboBox2().addItem(v);
+            algorithmsDialog.getComboBox1().addItem(v);
+            algorithmsDialog.getComboBox2().addItem(v);
         }
 
-		genericDialog.getButtonOK().addActionListener(e1 -> {
+		algorithmsDialog.getButtonOK().addActionListener(e1 -> {
 
-            EFVertex source = (EFVertex) genericDialog.getComboBox1().getSelectedItem();
-            EFVertex target = (EFVertex) genericDialog.getComboBox2().getSelectedItem();
+            EFVertex source = (EFVertex) algorithmsDialog.getComboBox1().getSelectedItem();
+            EFVertex target = (EFVertex) algorithmsDialog.getComboBox2().getSelectedItem();
 
             BreadthFirstSearch bfss =
                     new BreadthFirstSearch(_graph, source, target);
 
-            genericDialog.getTextArea1().setText("");
-            genericDialog.getTextArea1().append(bfss.doSearch());
+            algorithmsDialog.getTextArea1().setText("");
+            algorithmsDialog.getTextArea1().append(bfss.doSearch());
         });
 
-		genericDialog.setVisible(true);
+		algorithmsDialog.setVisible(true);
 	}
 
 	private static void dijkstraAction() {
 		Set<EFVertex> vertexSet = _graph.vertexSet();
 
-		GenericDialog genericDialog = new GenericDialog();
+		AlgorithmsDialog algorithmsDialog = new AlgorithmsDialog();
 
 		for (EFVertex v : vertexSet) {
-            genericDialog.getComboBox1().addItem(v);
-            genericDialog.getComboBox2().addItem(v);
+            algorithmsDialog.getComboBox1().addItem(v);
+            algorithmsDialog.getComboBox2().addItem(v);
         }
 
-		genericDialog.getButtonOK().addActionListener(e1 -> {
+		algorithmsDialog.getButtonOK().addActionListener(e1 -> {
 
-            EFVertex source = (EFVertex) genericDialog.getComboBox1().getSelectedItem();
-            EFVertex target = (EFVertex) genericDialog.getComboBox2().getSelectedItem();
+            EFVertex source = (EFVertex) algorithmsDialog.getComboBox1().getSelectedItem();
+            EFVertex target = (EFVertex) algorithmsDialog.getComboBox2().getSelectedItem();
 
             Dijkstra.computePath(_graph, source);
 
-            genericDialog.getTextArea1().setText("");
+            algorithmsDialog.getTextArea1().setText("");
 
-            genericDialog.getTextArea1().append(source.toString());
-            genericDialog.getTextArea1().append(target.toString());
-
-            genericDialog.getTextArea1().append(Dijkstra.getShortestPathTo(target));
+            algorithmsDialog.getTextArea1().append(Dijkstra.getShortestPathTo(target));
 
         });
 
-		genericDialog.setVisible(true);
+		algorithmsDialog.setVisible(true);
 	}
 
 	private static void aStarAction() {
 		Set<EFVertex> vertexSet = _graph.vertexSet();
 
-		GenericDialog genericDialog = new GenericDialog();
+		AlgorithmsDialog algorithmsDialog = new AlgorithmsDialog();
 
 		for (EFVertex v : vertexSet) {
-            genericDialog.getComboBox1().addItem(v);
-            genericDialog.getComboBox2().addItem(v);
+            algorithmsDialog.getComboBox1().addItem(v);
+            algorithmsDialog.getComboBox2().addItem(v);
         }
 
-		genericDialog.getButtonOK().addActionListener(e1 -> {
+		algorithmsDialog.getButtonOK().addActionListener(e1 -> {
 
-            EFVertex source = (EFVertex) genericDialog.getComboBox1().getSelectedItem();
-            EFVertex target = (EFVertex) genericDialog.getComboBox2().getSelectedItem();
+            EFVertex source = (EFVertex) algorithmsDialog.getComboBox1().getSelectedItem();
+            EFVertex target = (EFVertex) algorithmsDialog.getComboBox2().getSelectedItem();
 
             AStar.computePath(_graph, source);
 
-            genericDialog.getTextArea1().setText("");
+            algorithmsDialog.getTextArea1().setText("");
 
-            genericDialog.getTextArea1().append(source.toString());
-            genericDialog.getTextArea1().append(target.toString());
+            algorithmsDialog.getTextArea1().append(source.toString());
+            algorithmsDialog.getTextArea1().append(target.toString());
 
-            genericDialog.getTextArea1().append(AStar.getShortestPathTo(target));
+            algorithmsDialog.getTextArea1().append(AStar.getShortestPathTo(target));
 
         });
 
-		genericDialog.setVisible(true);
+		algorithmsDialog.setVisible(true);
 	}
 
 	private static void randomGraphAction(MainWindow mw) {
@@ -222,9 +228,7 @@ public class StartUp  {
 		rg.setVisible(true);
 	}
 
-
-	private static void positionVertexAt(Object vertex, int x, int y)
-	{
+	private static void positionVertexAt(Object vertex, int x, int y) {
 		DefaultGraphCell cell = _adapter.getVertexCell(vertex);
 		Map<?, ?> attr = cell.getAttributes();
 		Rectangle2D b = GraphConstants.getBounds(attr);
