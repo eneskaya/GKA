@@ -42,7 +42,7 @@ public class GraphFileReaderTest {
 	}
 
 	@Test
-	public void testCheckIfRightTypeWasReturned() {
+	public void testCheckIfCorrectTypeWasReturned() {
 		assertTrue(_gf1.getGraph() instanceof DirectedPseudograph);
 		assertTrue(_gf2.getGraph() instanceof Pseudograph);
 		assertTrue(_gf3.getGraph() instanceof WeightedPseudograph);

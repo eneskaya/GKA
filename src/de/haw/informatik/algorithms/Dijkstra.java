@@ -14,6 +14,7 @@ public class Dijkstra {
 	public static EFVertex _source;
 	public static EFVertex _target;
 	public static Map<EFVertex, Double> _map = new HashMap<>();
+	public static int _graphAccesses;
 
 	/**
 	 * Computes the shortest path for two given vertices and a graph.
@@ -25,8 +26,10 @@ public class Dijkstra {
 	 */
 	public static void computePath(Graph graph, EFVertex source) {
 		_source = source;
+		_graphAccesses = 0;
 
 		Set<EFVertex> vertexes = graph.vertexSet();
+		_graphAccesses++;
 
 		for (EFVertex v : vertexes) {
 			_map.put(v, Double.POSITIVE_INFINITY);
@@ -43,17 +46,21 @@ public class Dijkstra {
 			EFVertex currentVertex = leQueue.poll();
 
 			Set<EFEdge> set = graph.edgesOf(currentVertex);
+			_graphAccesses++;
 
 			for (EFEdge e : set) {
 
 				double weight = graph.getEdgeWeight(e);
+				_graphAccesses++;
 				double distanceFromCurrentToTarget = _map.get(currentVertex) + weight;
 
 				EFVertex target = (EFVertex) graph.getEdgeTarget(e);
+				_graphAccesses++;
 				
 
 				if (graph instanceof WeightedPseudograph || graph instanceof Pseudograph){
 					EFVertex targetVertex2 = (EFVertex) graph.getEdgeSource(e);
+					_graphAccesses++;
 
 					if (!_map.containsKey(targetVertex2)){
 						_map.put(targetVertex2, distanceFromCurrentToTarget);
@@ -100,6 +107,7 @@ public class Dijkstra {
 		return "Der Kürzeste Weg von "
 				+ _source.getName() + " nach "
 				+ _target.getName() + " ist:\n" + path
-				+ "\n" + "Strecke: " + _map.get(target);
+				+ "\n" + "Strecke: " + _map.get(target)
+				+ "\n" + "Anzahl der Zugriffe: " + _graphAccesses;
 	}
 }

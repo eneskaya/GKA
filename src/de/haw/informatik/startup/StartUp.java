@@ -70,8 +70,8 @@ public class StartUp  {
             int x, y = 0;
 
             for (EFVertex v : vertices) {
-                x = (int) (Math.random() * 900);
-                y = (int) (Math.random() * 500);
+                x = (int) (Math.random() * 900 + 50);
+                y = (int) (Math.random() * 700 + 50);
                 positionVertexAt(v, x, y);
             }
 
@@ -197,8 +197,8 @@ public class StartUp  {
             int x, y = 0;
 
             for (EFVertex v : vertices) {
-                x = (int) (Math.random() * 900);
-                y = (int) (Math.random() * 500);
+                x = (int) (Math.random() * 900 + 50);
+                y = (int) (Math.random() * 700 + 50);
                 positionVertexAt(v, x, y);
             }
 

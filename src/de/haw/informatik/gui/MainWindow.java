@@ -44,8 +44,7 @@ public class MainWindow {
 
 		fileMenu.add(fileOpen);
 		fileMenu.add(fileSave);
-		fileMenu.addSeparator();
-		fileMenu.add("Bitte nur .graph Dateien");
+		//fileMenu.addSeparator();
 
 		menuBar.add(fileMenu);
 
