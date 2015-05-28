@@ -46,11 +46,11 @@ public class GraphRandomGenerator {
 
             EFEdge edge = (EFEdge) _graph.addEdge(verticesArray[a], verticesArray[b]);
 
-            ((WeightedGraph) _graph).setEdgeWeight(edge, ((int) (Math.random() * vertexCount * 30)));
+            int weight = ((EFVertex) verticesArray[a]).getAttributeValue() - ((EFVertex) verticesArray[b]).getAttributeValue();
+
+            ((WeightedGraph) _graph).setEdgeWeight(edge, Math.abs(weight));
         }
 
         return _graph;
     }
-
-
 }
