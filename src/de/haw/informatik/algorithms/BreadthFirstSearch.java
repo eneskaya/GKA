@@ -2,6 +2,7 @@ package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
+import de.haw.informatik.datatypes.EFWeightedEdge;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.WeightedPseudograph;
@@ -10,7 +11,7 @@ import java.util.*;
 
 public class BreadthFirstSearch {
 
-    private Graph<EFVertex, EFEdge> _graph;
+    private Graph _graph;
 
     private EFVertex _source, _target;
 
@@ -21,7 +22,7 @@ public class BreadthFirstSearch {
      * @param source
      * @param target
      */
-    public BreadthFirstSearch(Graph<EFVertex, EFEdge> graph, EFVertex source, EFVertex target) {
+    public BreadthFirstSearch(Graph graph, EFVertex source, EFVertex target) {
         _graph = graph;
         _source = source;
         _target = target;
@@ -46,11 +47,11 @@ public class BreadthFirstSearch {
                 edges = _graph.edgesOf(temp);
 
                 for (EFEdge e : edges) {
-                    EFVertex targetVertex = _graph.getEdgeTarget(e);
+                    EFVertex targetVertex = (EFVertex) _graph.getEdgeTarget(e);
                     if (_graph instanceof WeightedPseudograph || _graph instanceof Pseudograph) {
                         EFVertex targetVertex2;
 
-                        if (!map.containsKey(targetVertex2 = _graph.getEdgeSource(e))) {
+                        if (!map.containsKey(targetVertex2 = (EFVertex) _graph.getEdgeSource(e))) {
                             queue.add(targetVertex2);
                             map.put(targetVertex2, temp);
                         }
