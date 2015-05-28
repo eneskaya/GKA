@@ -3,9 +3,10 @@ package de.haw.informatik.startup;
 import de.haw.informatik.algorithms.AStar;
 import de.haw.informatik.algorithms.BreadthFirstSearch;
 import de.haw.informatik.algorithms.Dijkstra;
+import de.haw.informatik.algorithms.Kruskal;
 import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.gui.FileChooser;
 import de.haw.informatik.gui.AlgorithmsDialog;
+import de.haw.informatik.gui.FileChooser;
 import de.haw.informatik.gui.MainWindow;
 import de.haw.informatik.gui.RandomGenerateDialog;
 import de.haw.informatik.tools.GraphFileReader;
@@ -17,6 +18,7 @@ import org.jgraph.graph.GraphConstants;
 import org.jgrapht.Graph;
 import org.jgrapht.ext.JGraphModelAdapter;
 
+import javax.swing.*;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.HashMap;
@@ -50,7 +52,11 @@ public class StartUp {
 
         mw.getAlgoAStarMenuItem().addActionListener(e -> aStarAction());
 
+        mw.getAlgoKruskalMenuItem().addActionListener(e -> kruskalAction(mw));
+
         mw.getRandomGraphGenerateItem().addActionListener(e -> randomGraphAction(mw));
+
+        mw.getKruskal().addActionListener(e -> loadKruskal(mw));
     }
 
     private static void fileOpenAction(MainWindow mw) {
@@ -184,7 +190,8 @@ public class StartUp {
         rg.getButtonOK().addActionListener(e1 -> {
             _graph = GraphRandomGenerator
                     .getRandomGraph(Integer.parseInt(rg.getTextField1().getText()),
-                            Integer.parseInt(rg.getTextField2().getText()));
+                            Integer.parseInt(rg.getTextField2().getText())
+                    );
 
             // Attributed, weighted
             _propertyCodeForActualGraph = 7;
@@ -215,6 +222,65 @@ public class StartUp {
         });
 
         rg.setVisible(true);
+    }
+
+    private static void kruskalAction(MainWindow mw) {
+
+        if (_graph == null) {
+            JOptionPane.showMessageDialog(mw.getPanelContainer(), "Please open a graph first or create a random one.");
+        } else {
+            mw.getPanelContainer().removeAll();
+
+            _graph = Kruskal.computeGraph(_graph);
+
+            Set<EFVertex> vertices = _graph.vertexSet();
+            _adapter = new JGraphModelAdapter(_graph);
+
+            int x, y = 0;
+
+            for (EFVertex v : vertices) {
+                x = (int) (Math.random() * 900 + 50);
+                y = (int) (Math.random() * 700 + 50);
+                positionVertexAt(v, x, y);
+            }
+
+            JGraph jgraph = new JGraph(_adapter);
+
+            jgraph.setGridEnabled(true);
+            jgraph.setAntiAliased(true);
+            jgraph.setBendable(true);
+
+            mw.getPanelContainer().add(jgraph);
+            mw.getPanelContainer().updateUI();
+        }
+    }
+
+    private static void loadKruskal(MainWindow mw) {
+        mw.getPanelContainer().removeAll();
+
+        GraphFileReader _reader = new GraphFileReader("bsp/kruskal.graph");
+        _graph = _reader.getGraph();
+        _propertyCodeForActualGraph = _reader.getGraphProperties();
+
+        Set<EFVertex> vertices = _graph.vertexSet();
+        _adapter = new JGraphModelAdapter(_graph);
+
+        int x, y = 0;
+
+        for (EFVertex v : vertices) {
+            x = (int) (Math.random() * 900 + 50);
+            y = (int) (Math.random() * 700 + 50);
+            positionVertexAt(v, x, y);
+        }
+
+        JGraph jgraph = new JGraph(_adapter);
+
+        jgraph.setGridEnabled(true);
+        jgraph.setAntiAliased(true);
+        jgraph.setBendable(true);
+
+        mw.getPanelContainer().add(jgraph);
+        mw.getPanelContainer().updateUI();
     }
 
     private static void positionVertexAt(Object vertex, int x, int y) {

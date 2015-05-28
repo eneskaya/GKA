@@ -1,6 +1,3 @@
-/**
- *
- */
 package de.haw.informatik.datatypes;
 
 import org.jgrapht.graph.DefaultWeightedEdge;
@@ -19,7 +16,6 @@ public class EFWeightedEdge extends DefaultWeightedEdge implements EFEdge, Compa
 
     @Override
     public String toString() {
-        // TODO Auto-generated method stub
         return "" + this.getWeight();
     }
 

@@ -8,9 +8,6 @@ import org.jgrapht.graph.WeightedPseudograph;
 
 import java.util.*;
 
-/**
- * Created by finnmasurat, eneskaya on 28.05.15.
- */
 public class Kruskal {
 
     public static ArrayList<EFWeightedEdge> allEdges = new ArrayList<>();
