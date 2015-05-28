@@ -30,8 +30,7 @@ public class BreadthFirstSearch {
     public String doSearch() {
 
         if (_graph != null && _source != null && _target != null && !_source.equals(_target)
-                && _graph.containsVertex(_source) && _graph.containsVertex(_target))
-        {
+                && _graph.containsVertex(_source) && _graph.containsVertex(_target)) {
             Queue<EFVertex> queue = new LinkedList<>();
             Map<EFVertex, EFVertex> map = new HashMap<>();
 

@@ -11,107 +11,104 @@ import java.util.*;
 
 public class AStar {
 
-	public static EFVertex _source;
-	public static EFVertex _target;
-	public static Map<EFVertex, Double> _map = new HashMap<>();
-	public static int _graphAccesses;
+    public static EFVertex _source;
+    public static EFVertex _target;
+    public static Map<EFVertex, Double> _map = new HashMap<>();
+    public static int _graphAccesses;
 
-	/**
-	 * Computes the shortest path for two given vertices and a graph.
-	 *
-	 * @param graph
-	 *            A graph
-	 * @param source
-	 *            The source vertex
-	 */
-	public static void computePath(Graph graph, EFVertex source) {
-		_source = source;
-		_graphAccesses = 0;
+    /**
+     * Computes the shortest path for two given vertices and a graph.
+     *
+     * @param graph  A graph
+     * @param source The source vertex
+     */
+    public static void computePath(Graph graph, EFVertex source) {
+        _source = source;
+        _graphAccesses = 0;
 
-		PriorityQueue<EFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
+        PriorityQueue<EFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
             return Double.compare(
-					_map.get(o1) + o1.getAttributeValue(),
-					_map.get(o2) + o2.getAttributeValue()
-			);
+                    _map.get(o1) + o1.getAttributeValue(),
+                    _map.get(o2) + o2.getAttributeValue()
+            );
         });
 
-		Set<EFVertex> vertices = graph.vertexSet();
-		_graphAccesses++;
+        Set<EFVertex> vertices = graph.vertexSet();
+        _graphAccesses++;
 
-		for (EFVertex v : vertices) {
-			_map.put(v, Double.POSITIVE_INFINITY);
-		}
+        for (EFVertex v : vertices) {
+            _map.put(v, Double.POSITIVE_INFINITY);
+        }
 
-		leQueue.add(source);
-		_map.put(source, 0.0);
+        leQueue.add(source);
+        _map.put(source, 0.0);
 
-		while (!leQueue.isEmpty()) {
+        while (!leQueue.isEmpty()) {
 
-			EFVertex currentVertex = leQueue.poll();
+            EFVertex currentVertex = leQueue.poll();
 
-			for (EFEdge e : (Set<EFEdge>) graph.edgesOf(currentVertex)) {
+            for (EFEdge e : (Set<EFEdge>) graph.edgesOf(currentVertex)) {
 
-				double weight = graph.getEdgeWeight(e);
-				_graphAccesses++;
+                double weight = graph.getEdgeWeight(e);
+                _graphAccesses++;
 
-				double distanceFromCurrentToTarget = _map.get(currentVertex) + weight;
-				EFVertex target = (EFVertex) graph.getEdgeTarget(e);
-				_graphAccesses++;
+                double distanceFromCurrentToTarget = _map.get(currentVertex) + weight;
+                EFVertex target = (EFVertex) graph.getEdgeTarget(e);
+                _graphAccesses++;
 
-				if (graph instanceof WeightedPseudograph || graph instanceof Pseudograph){
+                if (graph instanceof WeightedPseudograph || graph instanceof Pseudograph) {
 
-					EFVertex targetVertex2 = (EFVertex) graph.getEdgeSource(e);
-					_graphAccesses++;
-					
-					if (!_map.containsKey(targetVertex2)) {
-						_map.put(targetVertex2, distanceFromCurrentToTarget);
-					}
-					
-					if (distanceFromCurrentToTarget < _map.get(targetVertex2)) {
-						leQueue.remove(targetVertex2);
-					
+                    EFVertex targetVertex2 = (EFVertex) graph.getEdgeSource(e);
+                    _graphAccesses++;
 
-						_map.replace(targetVertex2, distanceFromCurrentToTarget);
-						targetVertex2._predecessor = currentVertex;
-						leQueue.add(targetVertex2);
-					}
-				}
+                    if (!_map.containsKey(targetVertex2)) {
+                        _map.put(targetVertex2, distanceFromCurrentToTarget);
+                    }
 
-				if (!_map.containsKey(target)) {
+                    if (distanceFromCurrentToTarget < _map.get(targetVertex2)) {
+                        leQueue.remove(targetVertex2);
 
-					_map.put(target, distanceFromCurrentToTarget);
-				}
-				
-				if (distanceFromCurrentToTarget < _map.get(target)) {
 
-					leQueue.remove(target);
-					_map.replace(target, distanceFromCurrentToTarget);
-					target._predecessor = currentVertex;
-					leQueue.add(target);
-				}
-			}
-		}
-	}
+                        _map.replace(targetVertex2, distanceFromCurrentToTarget);
+                        targetVertex2._predecessor = currentVertex;
+                        leQueue.add(targetVertex2);
+                    }
+                }
 
-	/**
-	 * Returns the shortest path to the given target vertex.
-	 * Already formatted output.
-	 *
-	 * @param target
-	 *            The target EFVertex
-	 * @return Formatted path representation
-	 */
-	public static String getShortestPathTo(EFVertex target) {
-		String path = "";
-		_target = target;
-		
-		for (EFVertex v = target; v != null; v = v._predecessor) {
-			path = " --> " + v.getName() + path;
-		}
+                if (!_map.containsKey(target)) {
 
-		return "Der Kürzeste Weg von " + _source.getName() + " nach "
-				+ _target.getName() + " ist:\n" + path
-				+ "\n" + "Strecke: " + _map.get(target)
-				+ "\n" + "Anzahl der Zugriffe: " + _graphAccesses;
-	}
+                    _map.put(target, distanceFromCurrentToTarget);
+                }
+
+                if (distanceFromCurrentToTarget < _map.get(target)) {
+
+                    leQueue.remove(target);
+                    _map.replace(target, distanceFromCurrentToTarget);
+                    target._predecessor = currentVertex;
+                    leQueue.add(target);
+                }
+            }
+        }
+    }
+
+    /**
+     * Returns the shortest path to the given target vertex.
+     * Already formatted output.
+     *
+     * @param target The target EFVertex
+     * @return Formatted path representation
+     */
+    public static String getShortestPathTo(EFVertex target) {
+        String path = "";
+        _target = target;
+
+        for (EFVertex v = target; v != null; v = v._predecessor) {
+            path = " --> " + v.getName() + path;
+        }
+
+        return "Der Kürzeste Weg von " + _source.getName() + " nach "
+                + _target.getName() + " ist:\n" + path
+                + "\n" + "Strecke: " + _map.get(target)
+                + "\n" + "Anzahl der Zugriffe: " + _graphAccesses;
+    }
 }

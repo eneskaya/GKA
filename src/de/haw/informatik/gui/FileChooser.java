@@ -3,7 +3,7 @@ package de.haw.informatik.gui;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class FileChooser implements FileChooserInterface{
+public class FileChooser implements FileChooserInterface {
 
     JFileChooser _chooser;
 

@@ -12,19 +12,19 @@ public class RandomNameGenerator {
     private List nameInstructions = new ArrayList();
 
     public RandomNameGenerator() {
-        String demoVocals[] = { "a", "e", "i", "o", "u", "ei", "ai", "ou", "j",
-                "ji", "y", "oi", "au", "oo" };
+        String demoVocals[] = {"a", "e", "i", "o", "u", "ei", "ai", "ou", "j",
+                "ji", "y", "oi", "au", "oo"};
 
-        String demoStartConsonants[] = { "b", "c", "d", "f", "g", "h", "k",
+        String demoStartConsonants[] = {"b", "c", "d", "f", "g", "h", "k",
                 "l", "m", "n", "p", "q", "r", "s", "t", "v", "w", "x", "z",
                 "ch", "bl", "br", "fl", "gl", "gr", "kl", "pr", "st", "sh",
-                "th" };
+                "th"};
 
-        String demoEndConsonants[] = { "b", "d", "f", "g", "h", "k", "l", "m",
+        String demoEndConsonants[] = {"b", "d", "f", "g", "h", "k", "l", "m",
                 "n", "p", "r", "s", "t", "v", "w", "z", "ch", "gh", "nn", "st",
-                "sh", "th", "tt", "ss", "pf", "nt" };
+                "sh", "th", "tt", "ss", "pf", "nt"};
 
-        String nameInstructions[] = { "vd", "cvdvd", "cvd", "vdvd" };
+        String nameInstructions[] = {"vd", "cvdvd", "cvd", "vdvd"};
 
         this.vocals.addAll(Arrays.asList(demoVocals));
         this.startConsonants.addAll(Arrays.asList(demoStartConsonants));
@@ -33,16 +33,12 @@ public class RandomNameGenerator {
     }
 
     /**
-     *
      * The names will look like this
      * (v=vocal,c=startConsonsonant,d=endConsonants): vd, cvdvd, cvd, vdvd
      *
-     * @param vocals
-     * pass something like {"a","e","ou",..}
-     * @param startConsonants
-     * pass something like {"s","f","kl",..}
-     * @param endConsonants
-     * pass something like {"th","sh","f",..}
+     * @param vocals          pass something like {"a","e","ou",..}
+     * @param startConsonants pass something like {"s","f","kl",..}
+     * @param endConsonants   pass something like {"th","sh","f",..}
      */
     public RandomNameGenerator(String[] vocals, String[] startConsonants,
                                String[] endConsonants) {
@@ -57,10 +53,9 @@ public class RandomNameGenerator {
      * @param vocals
      * @param startConsonants
      * @param endConsonants
-     * @param nameInstructions
-     * Use only the following letters:
-     * (v=vocal,c=startConsonsonant,d=endConsonants)! Pass something
-     * like {"vd", "cvdvd", "cvd", "vdvd"}
+     * @param nameInstructions Use only the following letters:
+     *                         (v=vocal,c=startConsonsonant,d=endConsonants)! Pass something
+     *                         like {"vd", "cvdvd", "cvd", "vdvd"}
      */
     public RandomNameGenerator(String[] vocals, String[] startConsonants,
                                String[] endConsonants, String[] nameInstructions) {
@@ -80,7 +75,29 @@ public class RandomNameGenerator {
         String name = "";
         int l = nameInstructions.length();
 
-        for (int i = 0; i < l; i++) { char x = nameInstructions.charAt(0); switch (x) { case 'v': name += getRandomElementFrom(vocals); break; case 'c': name += getRandomElementFrom(startConsonants); break; case 'd': name += getRandomElementFrom(endConsonants); break; } nameInstructions = nameInstructions.substring(1); } return name; } private String firstCharUppercase(String name) { return Character.toString(name.charAt(0)).toUpperCase() + name.substring(1); } private String getRandomElementFrom(List v) {
+        for (int i = 0; i < l; i++) {
+            char x = nameInstructions.charAt(0);
+            switch (x) {
+                case 'v':
+                    name += getRandomElementFrom(vocals);
+                    break;
+                case 'c':
+                    name += getRandomElementFrom(startConsonants);
+                    break;
+                case 'd':
+                    name += getRandomElementFrom(endConsonants);
+                    break;
+            }
+            nameInstructions = nameInstructions.substring(1);
+        }
+        return name;
+    }
+
+    private String firstCharUppercase(String name) {
+        return Character.toString(name.charAt(0)).toUpperCase() + name.substring(1);
+    }
+
+    private String getRandomElementFrom(List v) {
 
         return (String) v.get(randomInt(0, v.size() - 1));
     }

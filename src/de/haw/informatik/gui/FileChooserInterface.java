@@ -6,7 +6,7 @@ interface FileChooserInterface {
      * Open a file.
      *
      * @return path
-     *          The absolute path to selected file.
+     * The absolute path to selected file.
      */
     String open();
 
@@ -14,7 +14,7 @@ interface FileChooserInterface {
      * Save a given file to the filesystem
      *
      * @return path
-     *          The absolute path to selected file.
+     * The absolute path to selected file.
      */
     String save();
 

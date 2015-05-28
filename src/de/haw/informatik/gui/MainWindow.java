@@ -5,104 +5,103 @@ import java.awt.*;
 
 public class MainWindow {
 
-	private JFrame _frame;
-	private JPanel _panelContainer;
+    private JFrame _frame;
+    private JPanel _panelContainer;
 
-	JMenuItem fileOpen;
-	JMenuItem fileSave;
+    JMenuItem fileOpen;
+    JMenuItem fileSave;
 
-	JMenuItem algoBFS;
-	JMenuItem algoDijkstra;
-	JMenuItem algoAStar;
+    JMenuItem algoBFS;
+    JMenuItem algoDijkstra;
+    JMenuItem algoAStar;
 
-	JMenuItem randomGraphGenerate;
+    JMenuItem randomGraphGenerate;
 
-	public MainWindow(String title) {
-		_frame = new JFrame(title);
-		_frame.setSize(1200, 900);
-		_frame.setResizable(false);
-		
-		_panelContainer = new JPanel();
-		_panelContainer.setLayout(new BorderLayout());
+    public MainWindow(String title) {
+        _frame = new JFrame(title);
+        _frame.setSize(1200, 900);
+        _frame.setResizable(false);
 
-		initMenu();
-		
-		_frame.add(_panelContainer);
-		_frame.setVisible(true);
-	}
+        _panelContainer = new JPanel();
+        _panelContainer.setLayout(new BorderLayout());
 
-	/**
-	 * Initialize the Menu.
-	 *
-	 */
-	private void initMenu() {
-		JMenuBar menuBar = new JMenuBar();
-		JMenu fileMenu = new JMenu("Graphen");
+        initMenu();
 
-		fileOpen = new JMenuItem("Graph laden...");
-		fileSave = new JMenuItem("Graph speichern...");
+        _frame.add(_panelContainer);
+        _frame.setVisible(true);
+    }
 
-		fileMenu.add(fileOpen);
-		fileMenu.add(fileSave);
-		//fileMenu.addSeparator();
+    /**
+     * Initialize the Menu.
+     */
+    private void initMenu() {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu fileMenu = new JMenu("Graphen");
 
-		menuBar.add(fileMenu);
+        fileOpen = new JMenuItem("Graph laden...");
+        fileSave = new JMenuItem("Graph speichern...");
 
-		JMenu algoMenu = new JMenu("Algorithmen");
+        fileMenu.add(fileOpen);
+        fileMenu.add(fileSave);
+        //fileMenu.addSeparator();
 
-		algoBFS = new JMenuItem("Breadth First Search");
-		algoDijkstra = new JMenuItem("Dijkstra Shortest Path");
-		algoAStar = new JMenuItem("A*");
+        menuBar.add(fileMenu);
 
-		algoMenu.add(algoBFS);
-		algoMenu.add(algoDijkstra);
-		algoMenu.add(algoAStar);
+        JMenu algoMenu = new JMenu("Algorithmen");
 
-		menuBar.add(algoMenu);
+        algoBFS = new JMenuItem("Breadth First Search");
+        algoDijkstra = new JMenuItem("Dijkstra Shortest Path");
+        algoAStar = new JMenuItem("A*");
 
-		JMenu randomMenu = new JMenu("Random");
+        algoMenu.add(algoBFS);
+        algoMenu.add(algoDijkstra);
+        algoMenu.add(algoAStar);
 
-		randomGraphGenerate = new JMenuItem("Zufälligen Graph erstellen...");
+        menuBar.add(algoMenu);
 
-		randomMenu.add(randomGraphGenerate);
-		menuBar.add(randomMenu);
+        JMenu randomMenu = new JMenu("Random");
 
-		_frame.setJMenuBar(menuBar);
-	}
+        randomGraphGenerate = new JMenuItem("Zufälligen Graph erstellen...");
+
+        randomMenu.add(randomGraphGenerate);
+        menuBar.add(randomMenu);
+
+        _frame.setJMenuBar(menuBar);
+    }
 
 
-	public JMenuItem getFileOpenMenuItem() {
-		return fileOpen;
-	}
+    public JMenuItem getFileOpenMenuItem() {
+        return fileOpen;
+    }
 
-	public  JMenuItem getFileSaveMenuItem() {
-		return fileSave;
-	}
+    public JMenuItem getFileSaveMenuItem() {
+        return fileSave;
+    }
 
-	public JMenuItem getAlgoBFSMenuItem() {
-		return algoBFS;
-	}
+    public JMenuItem getAlgoBFSMenuItem() {
+        return algoBFS;
+    }
 
-	public JMenuItem getAlgoDijkstraMenuItem() {
-		return algoDijkstra;
-	}
+    public JMenuItem getAlgoDijkstraMenuItem() {
+        return algoDijkstra;
+    }
 
-	public JMenuItem getAlgoAStarMenuItem() {
-		return algoAStar;
-	}
+    public JMenuItem getAlgoAStarMenuItem() {
+        return algoAStar;
+    }
 
-	public JMenuItem getRandomGraphGenerateItem() {
-		return randomGraphGenerate;
-	}
+    public JMenuItem getRandomGraphGenerateItem() {
+        return randomGraphGenerate;
+    }
 
-	/**
-	 * Return the JPanelContainer in which the Graph should be drawn.
-	 *
-	 * @return JPanel
-	 * 			the panelContainer
-	 */
-	public JPanel getPanelContainer() {
-		return _panelContainer;
-	}
+    /**
+     * Return the JPanelContainer in which the Graph should be drawn.
+     *
+     * @return JPanel
+     * the panelContainer
+     */
+    public JPanel getPanelContainer() {
+        return _panelContainer;
+    }
 
 }

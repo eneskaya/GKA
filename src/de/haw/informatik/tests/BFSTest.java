@@ -33,8 +33,8 @@ public class BFSTest {
 
         assertEquals(
                 "Der Kürzeste Weg von a nach j ist:\n" +
-                "a --> b --> j\n" +
-                "über 2 Kante(n).", _bfs.doSearch());
+                        "a --> b --> j\n" +
+                        "über 2 Kante(n).", _bfs.doSearch());
     }
 
 }
