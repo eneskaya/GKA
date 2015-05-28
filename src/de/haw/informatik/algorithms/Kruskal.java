@@ -15,7 +15,10 @@ public class Kruskal {
     public static Graph computeGraph(Graph graph) {
 
         for (EFEdge ef : (Set<EFEdge>) graph.edgeSet()) {
-            allEdges.add((EFWeightedEdge) ef);
+
+            if (!(graph.getEdgeSource(ef).equals(graph.getEdgeTarget(ef)))) {
+                allEdges.add((EFWeightedEdge) ef);
+            }
 
         }
 
