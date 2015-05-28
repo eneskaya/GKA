@@ -10,16 +10,21 @@ import org.jgrapht.graph.DefaultWeightedEdge;
  *         Finn Masurat (Senior Vice President Of Visual Represenational Algorithmic Calculations)
  */
 @SuppressWarnings("serial")
-public class EFWeightedEdge extends DefaultWeightedEdge implements EFEdge {
+public class EFWeightedEdge extends DefaultWeightedEdge implements EFEdge, Comparable {
 
     @Override
     public String formatted() {
-        return ((EFVertex) this.getSource()).toString() + "," + ((EFVertex) this.getTarget()).toString() + "::" + (int) this.getWeight();
+        return this.getSource().toString() + "," + this.getTarget().toString() + "::" + (int) this.getWeight();
     }
 
     @Override
     public String toString() {
         // TODO Auto-generated method stub
         return "" + this.getWeight();
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return Double.compare(this.getWeight(), ((EFWeightedEdge) o).getWeight());
     }
 }
