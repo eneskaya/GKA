@@ -59,7 +59,6 @@ public class Prim {
             spanningTree.addEdge(currentVertex, target);
         }
 
-
         return spanningTree;
     }
 

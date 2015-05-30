@@ -1,14 +1,8 @@
 package de.haw.informatik.startup;
 
-import de.haw.informatik.algorithms.AStar;
-import de.haw.informatik.algorithms.BreadthFirstSearch;
-import de.haw.informatik.algorithms.Dijkstra;
-import de.haw.informatik.algorithms.Kruskal;
+import de.haw.informatik.algorithms.*;
 import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.gui.AlgorithmsDialog;
-import de.haw.informatik.gui.FileChooser;
-import de.haw.informatik.gui.MainWindow;
-import de.haw.informatik.gui.RandomGenerateDialog;
+import de.haw.informatik.gui.*;
 import de.haw.informatik.tools.GraphFileReader;
 import de.haw.informatik.tools.GraphFileWriter;
 import de.haw.informatik.tools.GraphRandomGenerator;
@@ -30,41 +24,43 @@ public class StartUp {
     private static Graph _graph;
     private static FileChooser _fc;
     private static JGraphModelAdapter _adapter;
+    private static MainWindow _mw;
     private static int _propertyCodeForActualGraph;
 
     public static void main(String[] args) {
 
+        _mw = new MainWindow();
         _fc = new FileChooser();
         registerUIActions();
-
     }
 
     private static void registerUIActions() {
-        MainWindow mw = new MainWindow();
 
-        mw.getFileOpenMenuItem().addActionListener(e -> fileOpenAction(mw));
+        _mw.getFileOpenMenuItem().addActionListener(e -> fileOpenAction());
 
-        mw.getFileSaveMenuItem().addActionListener(e -> fileSaveAction());
+        _mw.getFileSaveMenuItem().addActionListener(e -> fileSaveAction());
 
-        mw.getAlgoBFSMenuItem().addActionListener(e -> bfsAction());
+        _mw.getAlgoBFSMenuItem().addActionListener(e -> bfsAction());
 
-        mw.getAlgoDijkstraMenuItem().addActionListener(e -> dijkstraAction());
+        _mw.getAlgoDijkstraMenuItem().addActionListener(e -> dijkstraAction());
 
-        mw.getAlgoAStarMenuItem().addActionListener(e -> aStarAction());
+        _mw.getAlgoAStarMenuItem().addActionListener(e -> aStarAction());
 
-        mw.getAlgoKruskalMenuItem().addActionListener(e -> kruskalAction(mw));
+        _mw.getAlgoKruskalMenuItem().addActionListener(e -> kruskalAction());
 
-        mw.getRandomGraphGenerateItem().addActionListener(e -> randomGraphAction(mw));
+        _mw.getRandomGraphGenerateItem().addActionListener(e -> randomGraphAction());
 
-        mw.getKruskal().addActionListener(e -> loadKruskal(mw));
+        _mw.getKruskal().addActionListener(e -> loadKruskal());
+
+        _mw.getAlgoPrimMenuItem().addActionListener(e -> primAction());
     }
 
-    private static void fileOpenAction(MainWindow mw) {
+    private static void fileOpenAction() {
         String result = _fc.open();
 
         if (!result.equals("Keine Datei ausgewählt.")) {
 
-            mw.getPanelContainer().removeAll();
+            _mw.getPanelContainer().removeAll();
 
             GraphFileReader _reader = new GraphFileReader(result);
             _graph = _reader.getGraph();
@@ -87,8 +83,8 @@ public class StartUp {
             jgraph.setAntiAliased(true);
             jgraph.setBendable(true);
 
-            mw.getPanelContainer().add(jgraph);
-            mw.getPanelContainer().updateUI();
+            _mw.getPanelContainer().add(jgraph);
+            _mw.getPanelContainer().updateUI();
         }
     }
 
@@ -184,19 +180,21 @@ public class StartUp {
         algorithmsDialog.setVisible(true);
     }
 
-    private static void randomGraphAction(MainWindow mw) {
+    private static void randomGraphAction() {
         RandomGenerateDialog rg = new RandomGenerateDialog();
 
         rg.getButtonOK().addActionListener(e1 -> {
+
+            _mw.getPanelContainer().removeAll();
+
             _graph = GraphRandomGenerator
-                    .getRandomGraph(Integer.parseInt(rg.getTextField1().getText()),
+                    .getRandomGraph(
+                            Integer.parseInt(rg.getTextField1().getText()),
                             Integer.parseInt(rg.getTextField2().getText())
                     );
 
             // Attributed, weighted
             _propertyCodeForActualGraph = 7;
-
-            mw.getPanelContainer().removeAll();
 
             Set<EFVertex> vertices = _graph.vertexSet();
             _adapter = new JGraphModelAdapter(_graph);
@@ -215,8 +213,8 @@ public class StartUp {
             jgraph.setAntiAliased(true);
             jgraph.setBendable(true);
 
-            mw.getPanelContainer().add(jgraph);
-            mw.getPanelContainer().updateUI();
+            _mw.getPanelContainer().add(jgraph);
+            _mw.getPanelContainer().updateUI();
 
             rg.dispose();
         });
@@ -224,19 +222,19 @@ public class StartUp {
         rg.setVisible(true);
     }
 
-    private static void kruskalAction(MainWindow mw) {
+    private static void kruskalAction() {
 
         if (_graph == null) {
-            JOptionPane.showMessageDialog(mw.getPanelContainer(), "Please open a graph first or create a random one.");
+            JOptionPane.showMessageDialog(_mw.getPanelContainer(), "Please open a graph first or create a random one.");
         } else {
-            mw.getPanelContainer().removeAll();
+            _mw.getPanelContainer().removeAll();
 
             _graph = Kruskal.computeGraph(_graph);
 
             Set<EFVertex> vertices = _graph.vertexSet();
             _adapter = new JGraphModelAdapter(_graph);
 
-            int x, y = 0;
+            int x, y;
 
             for (EFVertex v : vertices) {
                 x = (int) (Math.random() * 900 + 50);
@@ -250,13 +248,60 @@ public class StartUp {
             jgraph.setAntiAliased(true);
             jgraph.setBendable(true);
 
-            mw.getPanelContainer().add(jgraph);
-            mw.getPanelContainer().updateUI();
+            _mw.getPanelContainer().add(jgraph);
+            _mw.getPanelContainer().updateUI();
         }
     }
 
-    private static void loadKruskal(MainWindow mw) {
-        mw.getPanelContainer().removeAll();
+    private static void primAction() {
+
+        if (_graph == null) {
+
+            JOptionPane.showMessageDialog(_mw.getPanelContainer(), "Please open a graph first or create a random one.");
+        } else {
+
+            _mw.getPanelContainer().removeAll();
+
+            PrimDialog pg = new PrimDialog();
+
+            Set<EFVertex> vertices = _graph.vertexSet();
+
+            for (EFVertex vertex : vertices) {
+                pg.getComboBox1().addItem(vertex);
+            }
+
+            pg.getButtonOK().addActionListener(e -> {
+                _graph = Prim.computeGraph(_graph, (EFVertex) pg.getComboBox1().getSelectedItem());
+
+                _adapter = new JGraphModelAdapter(_graph);
+
+                int x, y;
+
+                for (EFVertex v : vertices) {
+                    x = (int) (Math.random() * 900 + 50);
+                    y = (int) (Math.random() * 700 + 50);
+                    positionVertexAt(v, x, y);
+                }
+
+                JGraph jgraph = new JGraph(_adapter);
+
+                jgraph.setGridEnabled(true);
+                jgraph.setAntiAliased(true);
+                jgraph.setBendable(true);
+
+                _mw.getPanelContainer().add(jgraph);
+                _mw.getPanelContainer().updateUI();
+
+                pg.dispose();
+            });
+
+            pg.setVisible(true);
+        }
+
+    }
+
+    private static void loadKruskal() {
+        _mw.getPanelContainer().removeAll();
 
         GraphFileReader _reader = new GraphFileReader("bsp/kruskal.graph");
         _graph = _reader.getGraph();
@@ -265,7 +310,7 @@ public class StartUp {
         Set<EFVertex> vertices = _graph.vertexSet();
         _adapter = new JGraphModelAdapter(_graph);
 
-        int x, y = 0;
+        int x, y;
 
         for (EFVertex v : vertices) {
             x = (int) (Math.random() * 900 + 50);
@@ -279,8 +324,8 @@ public class StartUp {
         jgraph.setAntiAliased(true);
         jgraph.setBendable(true);
 
-        mw.getPanelContainer().add(jgraph);
-        mw.getPanelContainer().updateUI();
+        _mw.getPanelContainer().add(jgraph);
+        _mw.getPanelContainer().updateUI();
     }
 
     private static void positionVertexAt(Object vertex, int x, int y) {

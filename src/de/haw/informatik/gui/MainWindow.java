@@ -23,6 +23,7 @@ public class MainWindow {
     JMenuItem algoDijkstra;
     JMenuItem algoAStar;
     JMenuItem algoKruskal;
+    JMenuItem algoPrim;
 
     JMenuItem randomGraphGenerate;
 
@@ -78,6 +79,7 @@ public class MainWindow {
         algoBFS = new JMenuItem("Breadth First Search");
         algoDijkstra = new JMenuItem("Dijkstra Shortest Path");
         algoAStar = new JMenuItem("A*");
+        algoPrim = new JMenuItem("Prim (Priority Queue)");
 
         algoKruskal = new JMenuItem("Kruskal");
 
@@ -86,6 +88,7 @@ public class MainWindow {
         algoMenu.add(algoAStar);
         algoMenu.addSeparator();
         algoMenu.add(algoKruskal);
+        algoMenu.add(algoPrim);
 
         menuBar.add(algoMenu);
 
@@ -126,6 +129,10 @@ public class MainWindow {
 
     public JMenuItem getAlgoKruskalMenuItem() {
         return algoKruskal;
+    }
+
+    public JMenuItem getAlgoPrimMenuItem() {
+        return algoPrim;
     }
 
     // Temporary, remove

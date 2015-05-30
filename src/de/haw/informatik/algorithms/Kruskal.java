@@ -14,40 +14,42 @@ public class Kruskal {
 
     public static Graph computeGraph(Graph graph) {
 
-        for (EFEdge ef : (Set<EFEdge>) graph.edgeSet()) {
+        // Put all edges of the graph in a list
+        for (EFEdge edge : (Set<EFEdge>) graph.edgeSet()) {
 
-            if (!(graph.getEdgeSource(ef).equals(graph.getEdgeTarget(ef)))) {
-                allEdges.add((EFWeightedEdge) ef);
+            if (!(graph.getEdgeSource(edge).equals(graph.getEdgeTarget(edge)))) {
+                allEdges.add((EFWeightedEdge) edge);
             }
-
         }
 
+        // Sort the edges based on the edge weight
         allEdges.sort((o1, o2) -> o1.compareTo(o2));
 
         WeightedPseudograph<EFVertex, EFWeightedEdge> spanningTree =
                 new WeightedPseudograph<>(EFWeightedEdge.class);
 
-        for (EFEdge ef : allEdges) {
+        for (EFEdge edge : allEdges) {
 
-            EFVertex target = (EFVertex) graph.getEdgeTarget(ef);
-            EFVertex source = (EFVertex) graph.getEdgeSource(ef);
+            EFVertex target = (EFVertex) graph.getEdgeTarget(edge);
+            EFVertex source = (EFVertex) graph.getEdgeSource(edge);
+
             BreadthFirstSearch check = new BreadthFirstSearch(spanningTree, source, target);
 
-            if ((check.doSearch().equals("Kein Ergebnis."))) {
+            if (check.doSearch().equals("Kein Ergebnis.")) {
 
                 if (!(spanningTree.containsVertex(target))) {
                     spanningTree.addVertex(target);
                 }
+
                 if (!(spanningTree.containsVertex(source))) {
                     spanningTree.addVertex(source);
                 }
-                EFWeightedEdge e = spanningTree.addEdge(source, target);
-                spanningTree.setEdgeWeight(e, graph.getEdgeWeight(ef));
 
+                EFWeightedEdge temporaryEdge = spanningTree.addEdge(source, target);
+                spanningTree.setEdgeWeight(temporaryEdge, graph.getEdgeWeight(edge));
             }
         }
 
         return spanningTree;
     }
-
 }
