@@ -36,10 +36,27 @@ public class Prim {
             EFVertex currentVertex = leQueue.poll();
             Set<EFWeightedEdge> set = graph.edgesOf(currentVertex);
 
+            EFVertex minWeightedEdge;
             for (EFWeightedEdge e : set) {
 
+                if (graph.getEdgeWeight(e) < map.get(graph.getEdgeTarget(e))) {
+                    map.replace((EFVertex) graph.getEdgeTarget(e), graph.getEdgeWeight(e));
+                }
             }
 
+            Map.Entry<EFVertex, Double> min = null;
+            for (Map.Entry<EFVertex, Double> entry : map.entrySet()) {
+                if (!visitedVertices.contains(entry) && ((entry.getKey().compareTo(min.getKey()) < 0) || min == null)) {
+
+                    min = entry;
+                }
+            }
+
+            EFVertex target = min.getKey();
+            spanningTree.addVertex(target);
+            visitedVertices.add(target);
+            leQueue.add(target);
+            spanningTree.addEdge(currentVertex, target);
         }
 
 
