@@ -1,6 +1,5 @@
 package de.haw.informatik.algorithms;
 
-import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.datatypes.EFWeightedEdge;
 import org.jgrapht.Graph;
@@ -46,9 +45,6 @@ public class Prim {
 
         return spanningTree;
     }
-
-
-
 
 
 }

@@ -40,7 +40,7 @@ public class StartUp {
     }
 
     private static void registerUIActions() {
-        MainWindow mw = new MainWindow("Graphentheorie");
+        MainWindow mw = new MainWindow();
 
         mw.getFileOpenMenuItem().addActionListener(e -> fileOpenAction(mw));
 

@@ -26,8 +26,8 @@ public class MainWindow {
 
     JMenuItem randomGraphGenerate;
 
-    public MainWindow(String title) {
-        _frame = new JFrame(title);
+    public MainWindow() {
+        _frame = new JFrame("Graphentheorie");
         _frame.setSize(1200, 900);
         _frame.setResizable(false);
 
