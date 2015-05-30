@@ -9,8 +9,8 @@ import java.util.*;
 
 public class Prim {
 
+    // Map with all Vertices and the shortest Edge from the spanningTree to them
     public static Map<EFVertex, Double> map = new HashMap<>();
-    public static Set<EFVertex> visitedVertices = new HashSet<>();
 
     public static Graph computeGraph(Graph graph, EFVertex startVertex) {
 
@@ -19,10 +19,12 @@ public class Prim {
         });
 
 
+        // spanningTree-Graph which we will return
         WeightedPseudograph<EFVertex, EFWeightedEdge> spanningTree =
                 new WeightedPseudograph<>(EFWeightedEdge.class);
 
 
+        // put all Vertices with POSITIV_INFINITY in the map, to check that it will definitly be change
         for (EFVertex ef : (Set<EFVertex>) graph.vertexSet()) {
             map.put(ef, Double.POSITIVE_INFINITY);
         }
@@ -30,12 +32,12 @@ public class Prim {
 
         leQueue.add(startVertex);
         spanningTree.addVertex(startVertex);
-        visitedVertices.add(startVertex);
 
         while (!leQueue.isEmpty()) {
             EFVertex currentVertex = leQueue.poll();
             Set<EFWeightedEdge> set = graph.edgesOf(currentVertex);
 
+            // refreshing the distances from the spanningTree to the Vertices
             for (EFWeightedEdge e : set) {
 
                 if (graph.getEdgeWeight(e) < map.get(graph.getEdgeTarget(e))) {
@@ -46,18 +48,19 @@ public class Prim {
                 }
             }
 
+            // check which Vertex is the closest, direct neighbour to the spanningTree
             Map.Entry<EFVertex, Double> min = null;
             for (Map.Entry<EFVertex, Double> entry : map.entrySet()) {
-                if (!visitedVertices.contains(entry.getKey()) && (min == null || entry.getValue() < min.getValue())) {
+                if (!spanningTree.containsVertex(entry.getKey()) && (min == null || entry.getValue() < min.getValue())) {
 
                     min = entry;
                 }
             }
 
+            // add this Vertex to the spanningTree with the edge to it
             if (min != null) {
                 EFVertex target = min.getKey();
                 spanningTree.addVertex(target);
-                visitedVertices.add(target);
                 leQueue.add(target);
                 EFWeightedEdge temporaryEdge = spanningTree.addEdge(target._predecessor, target);
                 spanningTree.setEdgeWeight(temporaryEdge, min.getValue());

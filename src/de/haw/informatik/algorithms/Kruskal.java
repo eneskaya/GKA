@@ -35,6 +35,9 @@ public class Kruskal {
 
             BreadthFirstSearch check = new BreadthFirstSearch(spanningTree, source, target);
 
+            // Check if there is a path in the spanningTree-Graph from the source to the target of the edge
+            // If yes, the edge is already in the spanningTree
+            // If no, we have to check which Vertex we have to add to create the edge
             if (check.doSearch().equals("Kein Ergebnis.")) {
 
                 if (!(spanningTree.containsVertex(target))) {
