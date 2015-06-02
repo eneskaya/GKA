@@ -20,13 +20,13 @@ public class Prim {
 
         // put all Vertices with POSITIV_INFINITY in the map, to check that it will definitly be change
         for (EFVertex ef : (Set<EFVertex>) graph.vertexSet()) {
+
             if (ef.equals(startVertex)) {
                 map.put(ef, 0.0);
             } else {
                 map.put(ef, Double.POSITIVE_INFINITY);
             }
             leQueue.add(ef);
-
         }
 
         // spanningTree-Graph which we will return
@@ -51,11 +51,12 @@ public class Prim {
                     map.put((EFVertex) graph.getEdgeTarget(e), graph.getEdgeWeight(e));
                     leQueue.add((EFVertex) graph.getEdgeTarget(e));
                 }
-                }
+            }
 
             // add the clostest direct neighbour to the spanningTree
-            // if the spanningTree doesnt contains it already
+            // if the spanningTree doesn't contain it already
             if (!spanningTree.containsVertex(currentVertex)) {
+
                 spanningTree.addVertex(currentVertex);
                 EFWeightedEdge temporaryEdge = spanningTree.addEdge(currentVertex._predecessor, currentVertex);
                 spanningTree.setEdgeWeight(temporaryEdge, map.get(currentVertex));
