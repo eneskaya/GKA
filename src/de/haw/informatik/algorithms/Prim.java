@@ -14,14 +14,17 @@ public class Prim {
 
     public static Graph computeGraph(Graph graph, EFVertex startVertex) {
 
-
         PriorityQueue<EFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
             return Double.compare(map.get(o1), map.get(o2));
         });
 
         // put all Vertices with POSITIV_INFINITY in the map, to check that it will definitly be change
         for (EFVertex ef : (Set<EFVertex>) graph.vertexSet()) {
-            map.put(ef, Double.POSITIVE_INFINITY);
+            if (ef.equals(startVertex)) {
+                map.put(ef, 0.0);
+            } else {
+                map.put(ef, Double.POSITIVE_INFINITY);
+            }
             leQueue.add(ef);
 
         }
@@ -30,13 +33,7 @@ public class Prim {
         WeightedPseudograph<EFVertex, EFWeightedEdge> spanningTree =
                 new WeightedPseudograph<>(EFWeightedEdge.class);
 
-        // setting startVertex on top of the PriorityQueue
         spanningTree.addVertex(startVertex);
-        leQueue.remove(startVertex);
-        map.remove(startVertex);
-        map.put(startVertex, 0.0);
-        leQueue.add(startVertex);
-
 
         while (!leQueue.isEmpty()) {
 
