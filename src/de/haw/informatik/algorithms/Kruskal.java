@@ -12,11 +12,14 @@ public class Kruskal {
 
     public static ArrayList<EFWeightedEdge> allEdges = new ArrayList<>();
 
+    public static double totalWeight;
+    public static int _graphAccesses;
+
     public static Graph computeGraph(Graph graph) {
 
         // Put all edges of the graph in a list
         for (EFEdge edge : (Set<EFEdge>) graph.edgeSet()) {
-
+            _graphAccesses++;
             if (!(graph.getEdgeSource(edge).equals(graph.getEdgeTarget(edge)))) {
                 allEdges.add((EFWeightedEdge) edge);
             }
@@ -29,7 +32,7 @@ public class Kruskal {
                 new WeightedPseudograph<>(EFWeightedEdge.class);
 
         for (EFEdge edge : allEdges) {
-
+            _graphAccesses++;
             EFVertex target = (EFVertex) graph.getEdgeTarget(edge);
             EFVertex source = (EFVertex) graph.getEdgeSource(edge);
 
@@ -50,9 +53,11 @@ public class Kruskal {
 
                 EFWeightedEdge temporaryEdge = spanningTree.addEdge(source, target);
                 spanningTree.setEdgeWeight(temporaryEdge, graph.getEdgeWeight(edge));
+                totalWeight += graph.getEdgeWeight(edge);
             }
         }
-
+        System.out.println("total weight = " + totalWeight);
+        System.out.println("total graph accesses = " + _graphAccesses);
         return spanningTree;
     }
 }
