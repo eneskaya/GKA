@@ -24,6 +24,7 @@ public class MainWindow {
     JMenuItem algoAStar;
     JMenuItem algoKruskal;
     JMenuItem algoPrim;
+    JMenuItem algoPrimFib;
 
     JMenuItem randomGraphGenerate;
     JMenuItem randomConnectedGraphGenerate;
@@ -81,6 +82,7 @@ public class MainWindow {
         algoDijkstra = new JMenuItem("Dijkstra Shortest Path");
         algoAStar = new JMenuItem("A*");
         algoPrim = new JMenuItem("Prim (Priority Queue)");
+        algoPrimFib = new JMenuItem("Prim (Fibonacci Heap)");
 
         algoKruskal = new JMenuItem("Kruskal");
 
@@ -90,6 +92,7 @@ public class MainWindow {
         algoMenu.addSeparator();
         algoMenu.add(algoKruskal);
         algoMenu.add(algoPrim);
+        algoMenu.add(algoPrimFib);
 
         menuBar.add(algoMenu);
 
@@ -170,6 +173,10 @@ public class MainWindow {
 
     public JMenuItem getRandomConnectedGraphGenerate() {
         return randomConnectedGraphGenerate;
+    }
+
+    public JMenuItem getAlgoPrimFib() {
+        return algoPrimFib;
     }
 
     /**

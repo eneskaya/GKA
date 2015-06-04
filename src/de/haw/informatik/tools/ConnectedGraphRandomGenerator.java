@@ -7,6 +7,7 @@ import org.jgrapht.Graph;
 import org.jgrapht.graph.WeightedPseudograph;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 public class ConnectedGraphRandomGenerator {
@@ -66,6 +67,19 @@ public class ConnectedGraphRandomGenerator {
                             - ((EFVertex) verticesArrayB[b]).getAttributeValue();
 
             _graph.setEdgeWeight(edge, Math.abs(weight));
+        }
+
+        // Now remove all the vertices, that have no edge
+        Set<EFVertex> vertexSet = _graph.vertexSet();
+
+        Iterator<EFVertex> vertexSetIterator = vertexSet.iterator();
+
+        while (vertexSetIterator.hasNext()) {
+            EFVertex aktuellerVertex = vertexSetIterator.next();
+
+            if (_graph.edgesOf(aktuellerVertex).isEmpty()) {
+                _graph.removeVertex(aktuellerVertex);
+            }
         }
     }
 

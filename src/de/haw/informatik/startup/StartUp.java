@@ -56,6 +56,8 @@ public class StartUp {
         _mw.getAlgoPrimMenuItem().addActionListener(e -> primAction());
 
         _mw.getRandomConnectedGraphGenerate().addActionListener(e -> randomConnectedGraphAction());
+
+        _mw.getAlgoPrimFib().addActionListener(e -> primFibAction());
     }
 
     private static void fileOpenAction() {
@@ -344,6 +346,51 @@ public class StartUp {
             pg.setVisible(true);
         }
 
+    }
+
+    private static void primFibAction() {
+        if (_graph == null) {
+
+            JOptionPane.showMessageDialog(_mw.getPanelContainer(), "Please open a graph first or create a random one.");
+        } else {
+
+            _mw.getPanelContainer().removeAll();
+
+            PrimDialog pg = new PrimDialog();
+
+            Set<EFVertex> vertices = _graph.vertexSet();
+
+            for (EFVertex vertex : vertices) {
+                pg.getComboBox1().addItem(vertex);
+            }
+
+            pg.getButtonOK().addActionListener(e -> {
+                _graph = PrimFibonacciHeap.computeGraph(_graph, (EFVertex) pg.getComboBox1().getSelectedItem());
+
+                _adapter = new JGraphModelAdapter(_graph);
+
+                int x, y;
+
+                for (EFVertex v : vertices) {
+                    x = (int) (Math.random() * 900 + 50);
+                    y = (int) (Math.random() * 700 + 50);
+                    positionVertexAt(v, x, y);
+                }
+
+                JGraph jgraph = new JGraph(_adapter);
+
+                jgraph.setGridEnabled(true);
+                jgraph.setAntiAliased(true);
+                jgraph.setBendable(true);
+
+                _mw.getPanelContainer().add(jgraph);
+                _mw.getPanelContainer().updateUI();
+
+                pg.dispose();
+            });
+
+            pg.setVisible(true);
+        }
     }
 
     private static void loadKruskal() {
