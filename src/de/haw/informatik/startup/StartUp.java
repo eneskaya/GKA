@@ -3,6 +3,7 @@ package de.haw.informatik.startup;
 import de.haw.informatik.algorithms.*;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.gui.*;
+import de.haw.informatik.tools.ConnectedGraphRandomGenerator;
 import de.haw.informatik.tools.GraphFileReader;
 import de.haw.informatik.tools.GraphFileWriter;
 import de.haw.informatik.tools.GraphRandomGenerator;
@@ -53,6 +54,8 @@ public class StartUp {
         _mw.getKruskal().addActionListener(e -> loadKruskal());
 
         _mw.getAlgoPrimMenuItem().addActionListener(e -> primAction());
+
+        _mw.getRandomConnectedGraphGenerate().addActionListener(e -> randomConnectedGraphAction());
     }
 
     private static void fileOpenAction() {
@@ -189,6 +192,49 @@ public class StartUp {
 
             _graph = GraphRandomGenerator
                     .getRandomGraph(
+                            Integer.parseInt(rg.getTextField1().getText()),
+                            Integer.parseInt(rg.getTextField2().getText())
+                    );
+
+            // Attributed, weighted
+            _propertyCodeForActualGraph = 7;
+
+            Set<EFVertex> vertices = _graph.vertexSet();
+            _adapter = new JGraphModelAdapter(_graph);
+
+            int x, y = 0;
+
+            for (EFVertex v : vertices) {
+                x = (int) (Math.random() * 900 + 50);
+                y = (int) (Math.random() * 700 + 50);
+                positionVertexAt(v, x, y);
+            }
+
+            JGraph jgraph = new JGraph(_adapter);
+
+            jgraph.setGridEnabled(true);
+            jgraph.setAntiAliased(true);
+            jgraph.setBendable(true);
+
+            _mw.getPanelContainer().add(jgraph);
+            _mw.getPanelContainer().updateUI();
+
+            rg.dispose();
+        });
+
+        rg.setVisible(true);
+    }
+
+    private static void randomConnectedGraphAction() {
+        RandomGenerateDialog rg = new RandomGenerateDialog();
+
+        rg.getButtonOK().addActionListener(e1 -> {
+
+            _mw.getPanelContainer().removeAll();
+
+
+            _graph = (new ConnectedGraphRandomGenerator())
+                    .getRandomConnectedGraph(
                             Integer.parseInt(rg.getTextField1().getText()),
                             Integer.parseInt(rg.getTextField2().getText())
                     );

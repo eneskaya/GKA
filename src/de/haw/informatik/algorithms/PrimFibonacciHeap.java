@@ -9,22 +9,24 @@ import java.util.*;
 
 public class PrimFibonacciHeap {
 
-
     //FibonacciHeap
     public static FibonacciHeap<EFVertex> leFib = new FibonacciHeap<>();
+
     // Map with all Vertices and the shortest Edge from the spanningTree to them
     public static HashMap<EFVertex, Double> map = new HashMap<>();
+
     //Map with all Vertices and their Entry in the Heap
     public static HashMap<EFVertex, FibonacciHeap.Entry> entryMap = new HashMap<>();
 
     public static double totalWeight;
-    public static int _graphAccesses;
+    public static int graphAccesses;
 
     public static Graph computeGraph(Graph graph, EFVertex startVertex) {
 
         // put all Vertices with POSITIV_INFINITY in the map, to check that it will definitly be change
         for (EFVertex ef : (Set<EFVertex>) graph.vertexSet()) {
-            _graphAccesses++;
+
+            graphAccesses++;
             if (ef.equals(startVertex)) {
                 FibonacciHeap.Entry entry = leFib.enqueue(ef, 0.0);
                 entryMap.put(ef, entry);
@@ -32,7 +34,6 @@ public class PrimFibonacciHeap {
                 FibonacciHeap.Entry entry = leFib.enqueue(ef, Double.POSITIVE_INFINITY);
                 entryMap.put(ef, entry);
             }
-
         }
 
         // spanningTree-Graph which we will return
@@ -47,7 +48,7 @@ public class PrimFibonacciHeap {
             Set<EFWeightedEdge> set = graph.edgesOf(currentVertex);
 
             for (EFWeightedEdge e : set) {
-                _graphAccesses++;
+                graphAccesses++;
                 // refreshing the distances from the spanningTree to the Vertices
                 if (graph.getEdgeWeight(e) < map.get(graph.getEdgeTarget(e))) {
 
@@ -69,12 +70,9 @@ public class PrimFibonacciHeap {
                 totalWeight += map.get(currentVertex);
             }
         }
+
         System.out.println("total weight = " + totalWeight);
-        System.out.println("total graph accesses = " + _graphAccesses);
+        System.out.println("total graph accesses = " + graphAccesses);
         return spanningTree;
     }
-
-
 }
-
-

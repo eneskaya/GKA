@@ -13,7 +13,7 @@ public class Prim {
     public static Map<EFVertex, Double> map = new HashMap<>();
 
     public static double totalWeight;
-    public static int _graphAccesses;
+    public static int graphAccesses;
 
     public static Graph computeGraph(Graph graph, EFVertex startVertex) {
 
@@ -24,7 +24,7 @@ public class Prim {
 
         // put all Vertices with POSITIV_INFINITY in the map, to check that it will definitly be change
         for (EFVertex ef : (Set<EFVertex>) graph.vertexSet()) {
-            _graphAccesses++;
+            graphAccesses++;
             if (ef.equals(startVertex)) {
                 map.put(ef, 0.0);
             } else {
@@ -45,7 +45,7 @@ public class Prim {
             Set<EFWeightedEdge> set = graph.edgesOf(currentVertex);
 
             for (EFWeightedEdge e : set) {
-                _graphAccesses++;
+                graphAccesses++;
                 // refreshing the distances from the spanningTree to the Vertices
                 if (graph.getEdgeWeight(e) < map.get(graph.getEdgeTarget(e))) {
                     leQueue.remove(graph.getEdgeTarget(e));
@@ -68,10 +68,7 @@ public class Prim {
             }
         }
         System.out.println("total weight = " + totalWeight);
-        System.out.println("total graph accesses = " + _graphAccesses);
+        System.out.println("total graph accesses = " + graphAccesses);
         return spanningTree;
     }
-
-
 }
-

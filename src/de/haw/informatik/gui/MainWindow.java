@@ -26,6 +26,7 @@ public class MainWindow {
     JMenuItem algoPrim;
 
     JMenuItem randomGraphGenerate;
+    JMenuItem randomConnectedGraphGenerate;
 
     public MainWindow() {
         _frame = new JFrame("Graphentheorie");
@@ -94,9 +95,11 @@ public class MainWindow {
 
         JMenu randomMenu = new JMenu("Random");
 
-        randomGraphGenerate = new JMenuItem("Zufälligen Graph erstellen...");
+        randomGraphGenerate = new JMenuItem("Zufälligen Graphen erstellen...");
+        randomConnectedGraphGenerate = new JMenuItem("Zufälligen, zusammenhängenden Graphen erstellen...");
 
         randomMenu.add(randomGraphGenerate);
+        randomMenu.add(randomConnectedGraphGenerate);
         menuBar.add(randomMenu);
 
         _frame.setJMenuBar(menuBar);
@@ -163,6 +166,10 @@ public class MainWindow {
 
     public JMenuItem getKruskal() {
         return kruskal;
+    }
+
+    public JMenuItem getRandomConnectedGraphGenerate() {
+        return randomConnectedGraphGenerate;
     }
 
     /**
