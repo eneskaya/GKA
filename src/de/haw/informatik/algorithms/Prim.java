@@ -44,28 +44,40 @@ public class Prim {
             EFVertex currentVertex = leQueue.poll();
             Set<EFWeightedEdge> set = graph.edgesOf(currentVertex);
 
+            if (Double.compare(map.get(currentVertex), Double.POSITIVE_INFINITY) == 0) {
+                spanningTree.addVertex(currentVertex);
+            }
+
+
             for (EFWeightedEdge e : set) {
                 graphAccesses++;
                 // refreshing the distances from the spanningTree to the Vertices
-                if (graph.getEdgeWeight(e) < map.get(graph.getEdgeTarget(e))) {
+                if (graph.getEdgeWeight(e) < map.get(graph.getEdgeTarget(e)) && graph.getEdgeSource(e).equals(currentVertex)) {
                     leQueue.remove(graph.getEdgeTarget(e));
                     EFVertex temp = (EFVertex) graph.getEdgeSource(e);
                     ((EFVertex) graph.getEdgeTarget(e))._predecessor = temp;
-                    map.remove(graph.getEdgeTarget(e));
                     map.put((EFVertex) graph.getEdgeTarget(e), graph.getEdgeWeight(e));
                     leQueue.add((EFVertex) graph.getEdgeTarget(e));
+                } else if (graph.getEdgeWeight(e) < map.get(graph.getEdgeSource(e)) && graph.getEdgeTarget(e).equals(currentVertex)) {
+                    leQueue.remove(graph.getEdgeSource(e));
+                    EFVertex temp = (EFVertex) graph.getEdgeTarget(e);
+                    ((EFVertex) graph.getEdgeSource(e))._predecessor = temp;
+                    map.put((EFVertex) graph.getEdgeSource(e), graph.getEdgeWeight(e));
+                    leQueue.add((EFVertex) graph.getEdgeSource(e));
                 }
             }
 
             // add the clostest direct neighbour to the spanningTree
             // if the spanningTree doesn't contain it already
             if (!spanningTree.containsVertex(currentVertex)) {
-
                 spanningTree.addVertex(currentVertex);
-                EFWeightedEdge temporaryEdge = spanningTree.addEdge(currentVertex._predecessor, currentVertex);
-                spanningTree.setEdgeWeight(temporaryEdge, map.get(currentVertex));
-                totalWeight += +map.get(currentVertex);
+                if (spanningTree.containsVertex(currentVertex._predecessor)) {
+                    EFWeightedEdge temporaryEdge = spanningTree.addEdge(currentVertex._predecessor, currentVertex);
+                    spanningTree.setEdgeWeight(temporaryEdge, map.get(currentVertex));
+                    totalWeight += +map.get(currentVertex);
+                }
             }
+
         }
         System.out.println("total weight = " + totalWeight);
         System.out.println("total graph accesses = " + graphAccesses);
