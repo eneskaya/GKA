@@ -1,5 +1,6 @@
 package de.haw.informatik.algorithms;
 
+import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.datatypes.EFWeightedEdge;
 import org.jgrapht.Graph;
@@ -43,6 +44,8 @@ public class Hierholzer {
             end = start;
         }
 
+        //---------------------------------------------------------
+
         ArrayList<EFVertex> way = new ArrayList<>();
         int insertIndex = 0;
         while (graph.edgeSet().size() > 0) {
@@ -72,10 +75,10 @@ public class Hierholzer {
         do {
             way.add(currentVertex);
             ArrayList<EFVertex> neighbours = new ArrayList<>();
-            Set<EFVertex> set = graph.edgesOf(currentVertex);
-            for (EFVertex ef : set) {
+            Set<EFEdge> set = graph.edgesOf(currentVertex);
+            for (EFEdge ef : set) {
 
-                if (graph.getEdgeSource(ef) == currentVertex) {
+                if (graph.getEdgeSource(ef).equals(currentVertex)) {
                     neighbours.add((EFVertex) graph.getEdgeTarget(ef));
                 } else {
                     neighbours.add((EFVertex) graph.getEdgeSource(ef));
@@ -84,10 +87,19 @@ public class Hierholzer {
             }
 
             EFVertex next = neighbours.iterator().next();
+
             graph.removeEdge(currentVertex, next);
+            if (graph.edgesOf(currentVertex).isEmpty()) {
+                graph.removeVertex(currentVertex);
+            }
+
+            if (graph.edgesOf(next).isEmpty()) {
+                graph.removeVertex(next);
+            }
+            currentVertex = next;
         } while (!currentVertex.equals(end));
 
-        if (start.equals(end)) {
+        if (!start.equals(end)) {
             way.add(end);
         }
 
