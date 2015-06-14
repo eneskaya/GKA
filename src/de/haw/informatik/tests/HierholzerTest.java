@@ -25,11 +25,15 @@ import static org.junit.Assert.assertEquals;
 public class HierholzerTest {
 
     GraphFileReader _gf;
+    GraphFileReader _sanduhr;
 
     @Before
     public void setUp() {
         _gf = new GraphFileReader("bsp/nikolaus.graph");
+        _sanduhr = new GraphFileReader("bsp/sanduhr.graph");
     }
+
+
 
     @Test
     public void verticesCount() {
@@ -79,9 +83,22 @@ public class HierholzerTest {
     }
 
     @Test
+    public void sanduhrTest() {
+
+        Graph graph = _sanduhr.getGraph();
+
+        ArrayList<EFVertex> hierholzer = (ArrayList<EFVertex>) Hierholzer.getPath(graph);
+
+        assertEquals(hierholzer.get(0), hierholzer.get(hierholzer.size() - 1));
+
+    }
+
+
+
+    @Test
     public void edgesCount() {
 
-        Graph graph = EulerGraphGenerator.getGraph(10, 10);
+        Graph graph = EulerGraphGenerator.getGraph(9, 15);
 
         int edgeCount = graph.edgeSet().size();
 
@@ -93,7 +110,7 @@ public class HierholzerTest {
     }
 
     @Test
-    public void eulerCircle() {
+    public void eulerCircuit() {
 
         Graph graph = EulerGraphGenerator.getGraph(9, 15);
 
@@ -102,4 +119,22 @@ public class HierholzerTest {
         assertEquals(hierholzer.get(0), hierholzer.get(hierholzer.size() - 1));
 
     }
+
+
+    //@Test
+    public void generatedEulerBomb() {
+
+        for(int i = 20; i < 30; i++) {
+            Graph graph = EulerGraphGenerator.getGraph(i, i +1);
+            int edgeCounter = graph.edgeSet().size();
+            System.out.println(i);
+            List<EFVertex> hierholzer = Hierholzer.getPath(graph);
+
+            assertEquals(hierholzer.get(0), hierholzer.get(hierholzer.size() - 1));
+            assertEquals(hierholzer.size(), edgeCounter + 1);
+
+        }
+    }
+
+
 }

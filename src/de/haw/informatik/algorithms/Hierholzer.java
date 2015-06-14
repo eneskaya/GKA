@@ -8,6 +8,7 @@ import java.util.*;
 
 public class Hierholzer {
 
+
     public static List<EFVertex> getPath(Graph graph) {
 
         EFVertex start;
@@ -60,7 +61,7 @@ public class Hierholzer {
 
         }
         if (oddCounter.size() == 0) {
-            way.add(start);
+            way.add(way.get(0));
         }
 
         return way;
@@ -74,6 +75,7 @@ public class Hierholzer {
         do {
             way.add(currentVertex);
             ArrayList<EFVertex> neighbours = new ArrayList<>();
+
             Set<EFEdge> set = graph.edgesOf(currentVertex);
             for (EFEdge ef : set) {
 
@@ -87,6 +89,8 @@ public class Hierholzer {
             EFVertex next = neighbours.iterator().next();
 
             graph.removeEdge(currentVertex, next);
+
+
             if (graph.edgesOf(currentVertex).isEmpty()) {
                 graph.removeVertex(currentVertex);
             }
@@ -95,6 +99,8 @@ public class Hierholzer {
                 graph.removeVertex(next);
             }
             currentVertex = next;
+
+
         } while (!currentVertex.equals(end));
 
         if (!start.equals(end)) {

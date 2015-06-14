@@ -3,12 +3,10 @@ package de.haw.informatik.tools;
 import de.haw.informatik.datatypes.EFDefaultEdge;
 import de.haw.informatik.datatypes.EFVertex;
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.EulerianCircuit;
 import org.jgrapht.graph.Pseudograph;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class EulerGraphGenerator {
@@ -49,6 +47,8 @@ public class EulerGraphGenerator {
             }
         }
 
+        System.out.println(verticesWithOddDegree);
+
         while (!verticesWithOddDegree.isEmpty()) {
 
             EFVertex v1 = verticesWithOddDegree.poll();
@@ -60,6 +60,11 @@ public class EulerGraphGenerator {
         for (EFVertex v : isolated) {
             graph.removeVertex(v);
         }
+
+        System.out.println(graph.vertexSet().size());
+        System.out.println(graph.edgeSet().size());
+
+        System.out.println(EulerianCircuit.isEulerian(graph));
 
         return graph;
     }
