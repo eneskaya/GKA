@@ -21,8 +21,6 @@ public class Fleury {
 
         List<EFVertex> path = new LinkedList<>();
 
-        UndirectedGraph otherGraph = new UndirectedSubgraph<>(graph, null, null);
-
         EFVertex start = (EFVertex) graph.vertexSet().iterator().next();
 
         path.add(start);

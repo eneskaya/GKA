@@ -38,8 +38,6 @@ public class StartUp {
 //
 //        System.out.println(graph);
 
-        Fleury.test();
-
     }
 
     private static void registerUIActions() {
