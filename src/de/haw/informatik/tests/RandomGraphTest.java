@@ -10,6 +10,9 @@ public class RandomGraphTest {
 
     @Test
     public void testEulerGraph() {
-        assertTrue(EulerianCircuit.isEulerian(EulerGraphGenerator.getGraph(10, 20)));
+
+        for (int i = 0; i < 100; i++) {
+            assertTrue(EulerianCircuit.isEulerian(EulerGraphGenerator.getGraph(1000, 10000)));
+        }
     }
 }
