@@ -26,13 +26,19 @@ public class StartUp {
     private static int _propertyCodeForActualGraph;
 
     public static void main(String[] args) {
-//
+
 //        _mw = new MainWindow();
 //        _fc = new FileChooser();
 //        registerUIActions();
 
-        System.out.println(EulerGraphGenerator.getGraph(1000, 10000));
+//        UndirectedGraph graph = EulerGraphGenerator.getGraph(10, 15);
+//        System.out.println(graph);
+//
+//        System.out.println(Fleury.isBridge(graph, (EFEdge) graph.edgeSet().iterator().next()));
+//
+//        System.out.println(graph);
 
+        Fleury.test();
 
     }
 

@@ -57,9 +57,7 @@ public class EulerGraphGenerator {
             graph.addEdge(v1, v2);
         }
 
-        for (EFVertex v : isolated) {
-            graph.removeVertex(v);
-        }
+        isolated.forEach(graph::removeVertex);
 
         System.out.println(graph.vertexSet().size());
         System.out.println(graph.edgeSet().size());

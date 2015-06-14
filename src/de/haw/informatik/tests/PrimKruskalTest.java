@@ -28,10 +28,4 @@ public class PrimKruskalTest {
 
         assertEquals(a, b, 1.0);
     }
-
-    @Test
-    public void testTotalVertices() {
-        int a = Kruskal.computeGraph(_graph1).vertexSet().size();
-        assertEquals(_graph1.vertexSet().size(), a);
-    }
 }
