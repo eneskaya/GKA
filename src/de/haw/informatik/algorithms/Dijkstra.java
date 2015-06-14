@@ -1,19 +1,21 @@
 package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
-import de.haw.informatik.datatypes.EFEFVertex;
-
+import de.haw.informatik.datatypes.EFVertex;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.WeightedPseudograph;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class Dijkstra {
 
-    public static EFEFVertex _source;
-    public static EFEFVertex _target;
-    public static Map<EFEFVertex, Double> _map = new HashMap<>();
+    public static EFVertex _source;
+    public static EFVertex _target;
+    public static Map<EFVertex, Double> _map = new HashMap<>();
     public static int _graphAccesses;
 
     /**
@@ -22,18 +24,18 @@ public class Dijkstra {
      * @param graph  A graph
      * @param source The source EFVertex
      */
-    public static void computePath(Graph graph, EFEFVertex source) {
+    public static void computePath(Graph graph, EFVertex source) {
         _source = source;
         _graphAccesses = 0;
 
-        Set<EFEFVertex> EFVertexes = graph.EFVertexSet();
+        Set<EFVertex> EFVertexes = graph.vertexSet();
         _graphAccesses++;
 
-        for (EFEFVertex v : EFVertexes) {
+        for (EFVertex v : EFVertexes) {
             _map.put(v, Double.POSITIVE_INFINITY);
         }
 
-        PriorityQueue<EFEFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
+        PriorityQueue<EFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
             return Double.compare(_map.get(o1), _map.get(o2));
         });
 
@@ -41,7 +43,7 @@ public class Dijkstra {
         _map.put(source, 0.0);
 
         while (!leQueue.isEmpty()) {
-            EFEFVertex currentEFVertex = leQueue.poll();
+            EFVertex currentEFVertex = leQueue.poll();
 
             Set<EFEdge> set = graph.edgesOf(currentEFVertex);
             _graphAccesses++;
@@ -52,12 +54,12 @@ public class Dijkstra {
                 _graphAccesses++;
                 double distanceFromCurrentToTarget = _map.get(currentEFVertex) + weight;
 
-                EFEFVertex target = (EFEFVertex) graph.getEdgeTarget(e);
+                EFVertex target = (EFVertex) graph.getEdgeTarget(e);
                 _graphAccesses++;
 
 
                 if (graph instanceof WeightedPseudograph || graph instanceof Pseudograph) {
-                    EFEFVertex targetEFVertex2 = (EFEFVertex) graph.getEdgeSource(e);
+                    EFVertex targetEFVertex2 = (EFVertex) graph.getEdgeSource(e);
                     _graphAccesses++;
 
                     if (!_map.containsKey(targetEFVertex2)) {
@@ -93,11 +95,11 @@ public class Dijkstra {
      * @param target The target EFEFVertex
      * @return Formatted path representation
      */
-    public static String getShortestPathTo(EFEFVertex target) {
+    public static String getShortestPathTo(EFVertex target) {
         String path = "";
         _target = target;
 
-        for (EFEFVertex v = target; v != null; v = v._predecessor) {
+        for (EFVertex v = target; v != null; v = v._predecessor) {
             path = " --> " + v.getName() + path;
         }
 
