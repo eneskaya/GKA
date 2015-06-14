@@ -15,12 +15,12 @@ import java.util.Set;
 @SuppressWarnings("all")
 public class Fleury {
 
-    public static List<EFEdge> getCircuit(UndirectedGraph graph) {
+    public static List<EFVertex> getCircuit(UndirectedGraph graph) {
 
         if (checkIsEulerian(graph)) throw new IllegalArgumentException("Kein Eulergraph.");
 
         EFVertex currentVertex = (EFVertex) graph.vertexSet().toArray()[0];
-        List<EFEdge> currentTrail = new ArrayList<>();
+        List<EFVertex> currentTrail = new ArrayList<>();
 
         return null;
     }
@@ -58,26 +58,6 @@ public class Fleury {
 
     private static boolean checkIsEulerian(UndirectedGraph graph) {
 
-        ArrayList<EFVertex> oddCounter = new ArrayList<>();
-
-        boolean eularian = false;
-
-
-        Set<EFVertex> vertexSet = graph.vertexSet();
-        for (EFVertex ef : vertexSet) {
-
-            if (graph.edgesOf(ef).isEmpty()) {
-                throw new IllegalArgumentException("Isolated EFVertex");
-            } else if (graph.edgesOf(ef).size() % 2 == 1) {
-                oddCounter.add(ef);
-            }
-        }
-
-        if (oddCounter.size() == 0) {
-            eularian = true;
-        }
-
-        return eularian;
-
+        return EulerianCircuit.isEulerian(graph);
     }
 }

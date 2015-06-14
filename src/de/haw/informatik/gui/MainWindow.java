@@ -11,12 +11,6 @@ public class MainWindow {
     JMenuItem fileOpen;
     JMenuItem fileSave;
 
-    JMenuItem bsp1;
-    JMenuItem bsp2;
-    JMenuItem bsp3;
-    JMenuItem bsp4;
-    JMenuItem bsp5;
-    JMenuItem bsp6;
     JMenuItem kruskal;
 
     JMenuItem algoBFS;
@@ -28,6 +22,8 @@ public class MainWindow {
 
     JMenuItem randomGraphGenerate;
     JMenuItem randomConnectedGraphGenerate;
+
+    JMenuItem randomEulerianGraphGenerate;
 
     public MainWindow() {
         _frame = new JFrame("Graphentheorie");
@@ -53,12 +49,6 @@ public class MainWindow {
         fileOpen = new JMenuItem("Graph laden...");
         fileSave = new JMenuItem("Graph speichern...");
 
-        bsp1 = new JMenuItem("bsp1.graph");
-        bsp2 = new JMenuItem("bsp2.graph");
-        bsp3 = new JMenuItem("bsp3.graph");
-        bsp4 = new JMenuItem("bsp4.graph");
-        bsp5 = new JMenuItem("bsp5.graph");
-        bsp6 = new JMenuItem("bsp6.graph");
         kruskal = new JMenuItem("kruskal.graph");
 
         fileMenu.add(fileOpen);
@@ -66,12 +56,6 @@ public class MainWindow {
 
         fileMenu.addSeparator();
 
-        fileMenu.add(bsp1);
-        fileMenu.add(bsp2);
-        fileMenu.add(bsp3);
-        fileMenu.add(bsp4);
-        fileMenu.add(bsp5);
-        fileMenu.add(bsp6);
         fileMenu.add(kruskal);
 
         menuBar.add(fileMenu);
@@ -98,11 +82,14 @@ public class MainWindow {
 
         JMenu randomMenu = new JMenu("Random");
 
-        randomGraphGenerate = new JMenuItem("Zufälligen Graphen erstellen...");
-        randomConnectedGraphGenerate = new JMenuItem("Zufälligen, zusammenhängenden Graphen erstellen...");
+        randomGraphGenerate = new JMenuItem("Randomisierten Graphen erstellen...");
+        randomConnectedGraphGenerate = new JMenuItem("Randomisierten, zusammenhängenden Graphen erstellen...");
+        randomEulerianGraphGenerate = new JMenuItem("Randomisierten eulerschen Graphen erstellen...");
 
         randomMenu.add(randomGraphGenerate);
         randomMenu.add(randomConnectedGraphGenerate);
+        randomMenu.add(randomEulerianGraphGenerate);
+
         menuBar.add(randomMenu);
 
         _frame.setJMenuBar(menuBar);
@@ -141,38 +128,16 @@ public class MainWindow {
         return algoPrim;
     }
 
-    // Temporary, remove
-
-    public JMenuItem getBsp1() {
-        return bsp1;
-    }
-
-    public JMenuItem getBsp2() {
-        return bsp2;
-    }
-
-    public JMenuItem getBsp3() {
-        return bsp3;
-    }
-
-    public JMenuItem getBsp4() {
-        return bsp4;
-    }
-
-    public JMenuItem getBsp5() {
-        return bsp5;
-    }
-
-    public JMenuItem getBsp6() {
-        return bsp6;
-    }
-
     public JMenuItem getKruskal() {
         return kruskal;
     }
 
     public JMenuItem getRandomConnectedGraphGenerate() {
         return randomConnectedGraphGenerate;
+    }
+
+    public JMenuItem getRandomEulerianGraphGenerate() {
+        return randomEulerianGraphGenerate;
     }
 
     public JMenuItem getAlgoPrimFib() {

@@ -27,9 +27,9 @@ public class StartUp {
 
     public static void main(String[] args) {
 
-//        _mw = new MainWindow();
-//        _fc = new FileChooser();
-//        registerUIActions();
+        _mw = new MainWindow();
+        _fc = new FileChooser();
+        registerUIActions();
 
         System.out.println(EulerGraphGenerator.getGraph(10, 10));
 
@@ -59,6 +59,8 @@ public class StartUp {
         _mw.getRandomConnectedGraphGenerate().addActionListener(e -> randomConnectedGraphAction());
 
         _mw.getAlgoPrimFib().addActionListener(e -> primFibAction());
+
+        _mw.getRandomEulerianGraphGenerate().addActionListener(e -> randomEulerGraphAction());
     }
 
     private static void fileOpenAction() {
@@ -245,6 +247,49 @@ public class StartUp {
 
             // Attributed, weighted
             _propertyCodeForActualGraph = 7;
+
+            Set<EFVertex> vertices = _graph.vertexSet();
+            _adapter = new JGraphModelAdapter(_graph);
+
+            int x, y = 0;
+
+            for (EFVertex v : vertices) {
+                x = (int) (Math.random() * 900 + 50);
+                y = (int) (Math.random() * 700 + 50);
+                positionVertexAt(v, x, y);
+            }
+
+            JGraph jgraph = new JGraph(_adapter);
+
+            jgraph.setGridEnabled(true);
+            jgraph.setAntiAliased(true);
+            jgraph.setBendable(true);
+
+            _mw.getPanelContainer().add(jgraph);
+            _mw.getPanelContainer().updateUI();
+
+            rg.dispose();
+        });
+
+        rg.setVisible(true);
+    }
+
+    private static void randomEulerGraphAction() {
+        RandomGenerateDialog rg = new RandomGenerateDialog();
+
+        rg.getButtonOK().addActionListener(e1 -> {
+
+            _mw.getPanelContainer().removeAll();
+
+
+            _graph = EulerGraphGenerator
+                    .getGraph(
+                            Integer.parseInt(rg.getTextField1().getText()),
+                            Integer.parseInt(rg.getTextField2().getText())
+                    );
+
+            // Attributed, weighted
+            _propertyCodeForActualGraph = 0;
 
             Set<EFVertex> vertices = _graph.vertexSet();
             _adapter = new JGraphModelAdapter(_graph);

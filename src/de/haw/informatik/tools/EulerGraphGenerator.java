@@ -5,10 +5,7 @@ import de.haw.informatik.datatypes.EFVertex;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.Pseudograph;
 
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("unchecked")
 public class EulerGraphGenerator {
@@ -24,6 +21,9 @@ public class EulerGraphGenerator {
         for (int i = 0; i < countVertices; i++) {
             graph.addVertex(new EFVertex("v" + i));
         }
+
+        List<EFVertex> vertices = new LinkedList<>(graph.vertexSet());
+        Collections.shuffle(vertices);
 
         for (int i = 0; i < countEdges; i++) {
 
@@ -41,7 +41,7 @@ public class EulerGraphGenerator {
         Queue<EFVertex> verticesWithOddDegree = new LinkedList<>();
 
         for (EFVertex v : (Set<EFVertex>) graph.vertexSet()) {
-            if (graph.degreeOf(v) % 2 != 0) {
+            if (graph.degreeOf(v) % 2 == 1) {
                 verticesWithOddDegree.add(v);
             }
         }
