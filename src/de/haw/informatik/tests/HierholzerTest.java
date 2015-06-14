@@ -94,7 +94,7 @@ public class HierholzerTest {
     }
 
     @Test
-    public void eulerKreis() {
+    public void eulerCircle() {
 
         Graph graph = EulerGraphRandomGenerator.constructGraph(9, 15);
 
