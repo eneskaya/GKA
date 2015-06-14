@@ -57,6 +57,27 @@ public class Fleury {
     }
 
     private static boolean checkIsEulerian(UndirectedGraph graph) {
-        return EulerianCircuit.isEulerian(graph);
+
+        ArrayList<EFVertex> oddCounter = new ArrayList<>();
+
+        boolean eularian = false;
+
+
+        Set<EFVertex> vertexSet = graph.vertexSet();
+        for (EFVertex ef : vertexSet) {
+
+            if (graph.edgesOf(ef).isEmpty()) {
+                throw new IllegalArgumentException("Isolated EFVertex");
+            } else if (graph.edgesOf(ef).size() % 2 == 1) {
+                oddCounter.add(ef);
+            }
+        }
+
+        if (oddCounter.size() == 0) {
+            eularian = true;
+        }
+
+        return eularian;
+
     }
 }
