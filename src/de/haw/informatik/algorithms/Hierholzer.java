@@ -17,8 +17,8 @@ public class Hierholzer {
         Map<EFVertex, Double> map = new HashMap<>();
 
 
-        Set<EFVertex> EFVertexSet = graph.vertexSet();
-        for (EFVertex ef : EFVertexSet) {
+        Set<EFVertex> vertexSet = graph.vertexSet();
+        for (EFVertex ef : vertexSet) {
 
             if (graph.edgesOf(ef).isEmpty()) {
                 throw new IllegalArgumentException("Isolated EFVertex");

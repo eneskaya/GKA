@@ -16,7 +16,7 @@ public class PrimKruskalTest {
 
     @Before
     public void setUp() {
-        _graph1 = new ConnectedGraphRandomGenerator().getRandomConnectedGraph(10);
+        _graph1 = new ConnectedGraphRandomGenerator().getRandomConnectedGraph(10, 10);
     }
 
     @Test

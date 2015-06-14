@@ -14,11 +14,11 @@ public class RandomGraphTest {
 
     @Before
     public void setUp() {
-        _graph1 = new ConnectedGraphRandomGenerator().getRandomConnectedGraph(10);
+        _graph1 = new ConnectedGraphRandomGenerator().getRandomConnectedGraph(10, 10);
     }
 
     @Test
-    public void testTotalWeightsAreEqual() {
+    public void testCorrectGenerationOfEulerGraph() {
         Graph graph = EulerGraphRandomGenerator.constructGraph(100, 200);
 
         assertEquals(200, graph.edgeSet().size());

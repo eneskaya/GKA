@@ -22,48 +22,63 @@ public class ConnectedGraphRandomGenerator {
     }
 
     @SuppressWarnings("unchecked")
-    public Graph getRandomConnectedGraph(int countVertices) {
+    public Graph getRandomConnectedGraph(int countVertices, int countEdges) {
 
         WeightedGraph graph = new WeightedPseudograph<EFVertex, EFWeightedEdge>(EFWeightedEdge.class);
 
-        Set<EFVertex> s = new HashSet<>();
-        Set<EFVertex> t = new HashSet<>();
+        Set<EFVertex> unvisited = new HashSet<>();
+        Set<EFVertex> visited = new HashSet<>();
 
         for (int i = 0; i < countVertices; i++) {
 
             EFVertex v = new EFVertex(rg.getName(), ((int) (Math.random() * countVertices)));
 
-            if (s.contains(v)) {
+            if (unvisited.contains(v)) {
                 i--;
                 continue;
             }
 
-            s.add(v);
+            unvisited.add(v);
         }
 
-        EFVertex current = this.randomVertexFromSet(s);
+        EFVertex current = this.randomVertexFromSet(unvisited);
 
-        for (EFVertex v : s) {
-            graph.addVertex(v);
-        }
+        unvisited.forEach(graph::addVertex);
 
-        s.remove(current);
-        t.add(current);
+        unvisited.remove(current);
+        visited.add(current);
 
-        while (s.size() > 0) {
-            EFVertex neighbour = this.randomVertexFromSet(s);
+        while (unvisited.size() > 0) {
+            EFVertex neighbour = this.randomVertexFromSet(unvisited);
 
-            if (!t.contains(neighbour)) {
+            if (!visited.contains(neighbour)) {
                 EFEdge edge = (EFEdge) graph.addEdge(current, neighbour);
 
                 int weight = current.getAttributeValue() - neighbour.getAttributeValue();
                 graph.setEdgeWeight(edge, Math.abs(weight));
 
-                s.remove(neighbour);
-                t.add(neighbour);
+                unvisited.remove(neighbour);
+                visited.add(neighbour);
             }
 
             current = neighbour;
+        }
+
+        if (graph.edgeSet().size() < countEdges) {
+
+            while (graph.edgeSet().size() < countEdges) {
+                // Get two random vertices
+                EFVertex firstRandomVertex = this.randomVertexFromSet(graph.vertexSet());
+                EFVertex secondRandomVertex = this.randomVertexFromSet(graph.vertexSet());
+
+                // Create an edge between them
+                EFEdge edge = (EFEdge) graph.addEdge(firstRandomVertex, secondRandomVertex);
+                int weight = firstRandomVertex.getAttributeValue() - secondRandomVertex.getAttributeValue();
+
+                graph.setEdgeWeight(edge, Math.abs(weight));
+
+                // repeat until the edge count has been reached
+            }
         }
 
         return graph;
