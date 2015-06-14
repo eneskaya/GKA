@@ -14,7 +14,6 @@ public class Hierholzer {
         EFVertex end;
 
         ArrayList<EFVertex> oddCounter = new ArrayList<>();
-        Map<EFVertex, Double> map = new HashMap<>();
 
 
         Set<EFVertex> vertexSet = graph.vertexSet();
@@ -41,6 +40,7 @@ public class Hierholzer {
 
         //---------------------------------------------------------
 
+
         ArrayList<EFVertex> way = new ArrayList<>();
         int insertIndex = 0;
         while (graph.edgeSet().size() > 0) {
@@ -59,6 +59,10 @@ public class Hierholzer {
             }
 
         }
+        if (oddCounter.size() == 0) {
+            way.add(start);
+        }
+
         return way;
     }
 
@@ -87,7 +91,7 @@ public class Hierholzer {
                 graph.removeVertex(currentVertex);
             }
 
-            if (graph.edgesOf(next).isEmpty()) {
+            if (graph.containsVertex(next) && graph.edgesOf(next).isEmpty()) {
                 graph.removeVertex(next);
             }
             currentVertex = next;
