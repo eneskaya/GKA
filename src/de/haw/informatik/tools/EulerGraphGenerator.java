@@ -3,6 +3,7 @@ package de.haw.informatik.tools;
 import de.haw.informatik.datatypes.EFDefaultEdge;
 import de.haw.informatik.datatypes.EFVertex;
 import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.EulerianCircuit;
 import org.jgrapht.graph.Pseudograph;
 
 import java.util.*;
@@ -22,9 +23,6 @@ public class EulerGraphGenerator {
             graph.addVertex(new EFVertex("v" + i));
         }
 
-        List<EFVertex> vertices = new LinkedList<>(graph.vertexSet());
-        Collections.shuffle(vertices);
-
         for (int i = 0; i < countEdges; i++) {
 
             EFVertex v1 = (EFVertex) graph.vertexSet().toArray()[random.nextInt(countVertices)];
@@ -39,12 +37,17 @@ public class EulerGraphGenerator {
         }
 
         Queue<EFVertex> verticesWithOddDegree = new LinkedList<>();
+        Queue<EFVertex> isolated = new LinkedList<>();
 
         for (EFVertex v : (Set<EFVertex>) graph.vertexSet()) {
             if (graph.degreeOf(v) % 2 == 1) {
                 verticesWithOddDegree.add(v);
+            } else if (graph.degreeOf(v) == 0) {
+                isolated.add(v);
             }
         }
+
+        System.out.println(verticesWithOddDegree);
 
         while (!verticesWithOddDegree.isEmpty()) {
 
@@ -52,10 +55,16 @@ public class EulerGraphGenerator {
             EFVertex v2 = verticesWithOddDegree.poll();
 
             graph.addEdge(v1, v2);
-
-            verticesWithOddDegree.remove(v1);
-            verticesWithOddDegree.remove(v2);
         }
+
+        for (EFVertex v : isolated) {
+            graph.removeVertex(v);
+        }
+
+        System.out.println(graph.vertexSet().size());
+        System.out.println(graph.edgeSet().size());
+
+        System.out.println(EulerianCircuit.isEulerian(graph));
 
         return graph;
     }

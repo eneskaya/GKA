@@ -26,12 +26,12 @@ public class StartUp {
     private static int _propertyCodeForActualGraph;
 
     public static void main(String[] args) {
+//
+//        _mw = new MainWindow();
+//        _fc = new FileChooser();
+//        registerUIActions();
 
-        _mw = new MainWindow();
-        _fc = new FileChooser();
-        registerUIActions();
-
-        System.out.println(EulerGraphGenerator.getGraph(10, 10));
+        System.out.println(EulerGraphGenerator.getGraph(1000, 10000));
 
 
     }
