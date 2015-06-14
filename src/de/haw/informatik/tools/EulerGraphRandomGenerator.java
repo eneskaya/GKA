@@ -2,6 +2,7 @@ package de.haw.informatik.tools;
 
 import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
+import de.haw.informatik.datatypes.EFWeightedEdge;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
 import org.jgrapht.graph.AbstractBaseGraph;
@@ -18,7 +19,7 @@ public class EulerGraphRandomGenerator {
             throw new IllegalArgumentException(
                     "The amount if edges must be bigger or equal the amount of vertices");
 
-        UndirectedGraph graph = new Pseudograph(EFEdge.class);
+        UndirectedGraph<EFVertex, EFEdge> graph = new Pseudograph(EFWeightedEdge.class);
 
         addVertices(graph, verticesAmount);
 
@@ -154,7 +155,6 @@ public class EulerGraphRandomGenerator {
                 reachable.add(v1);
             }
         }
-
     }
 
     private static void addVertices(Graph graph, int verticesAmount) {
