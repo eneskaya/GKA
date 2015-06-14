@@ -4,19 +4,18 @@ package de.haw.informatik.tests;
 
 import de.haw.informatik.algorithms.Hierholzer;
 import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.tools.EulerGraphRandomGenerator;
+import de.haw.informatik.tools.EulerGraphGenerator;
 import de.haw.informatik.tools.GraphFileReader;
 import org.jgrapht.Graph;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by finnmasurat on 12.06.15.
@@ -35,7 +34,7 @@ public class HierholzerTest {
     @Test
     public void verticesCount() {
 
-        Graph graph = EulerGraphRandomGenerator.constructGraph(10, 15);
+        Graph graph = EulerGraphGenerator.getGraph(10, 15);
 
         int verticesCount = graph.vertexSet().size();
 
@@ -82,7 +81,7 @@ public class HierholzerTest {
     @Test
     public void edgesCount() {
 
-        Graph graph = EulerGraphRandomGenerator.constructGraph(10, 10);
+        Graph graph = EulerGraphGenerator.getGraph(10, 10);
 
         int edgeCount = graph.edgeSet().size();
 
@@ -96,7 +95,7 @@ public class HierholzerTest {
     @Test
     public void eulerCircle() {
 
-        Graph graph = EulerGraphRandomGenerator.constructGraph(9, 15);
+        Graph graph = EulerGraphGenerator.getGraph(9, 15);
 
         List<EFVertex> hierholzer = Hierholzer.getPath(graph);
 

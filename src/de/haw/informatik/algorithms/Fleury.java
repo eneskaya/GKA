@@ -2,48 +2,61 @@ package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
+import de.haw.informatik.datatypes.EFWeightedEdge;
 import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.EulerianCircuit;
+import org.jgrapht.graph.WeightedPseudograph;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
+@SuppressWarnings("all")
 public class Fleury {
 
-    @SuppressWarnings("all")
-    public static List<EFEdge> getPath(Graph graph) {
+    public static List<EFEdge> getCircuit(UndirectedGraph graph) {
 
-        List<EFVertex> path = new ArrayList<>();
+        if (checkIsEulerian(graph)) throw new IllegalArgumentException("Kein Eulergraph.");
 
-        // Choose the first element v0 of the graph...
-        EFVertex vertex = (EFVertex) graph.vertexSet().toArray()[0];
-        // ...and add to list
-        path.add(vertex);
+        EFVertex currentVertex = (EFVertex) graph.vertexSet().toArray()[0];
+        List<EFEdge> currentTrail = new ArrayList<>();
 
         return null;
     }
 
-    /**
-     * Takes a set of vertices and returns a random element
-     * from this set.
-     *
-     * @param set
-     * @return EFVertex
-     */
-    private static EFVertex randomVertexFromSet(Set<EFVertex> set) {
-        int size = set.size();
-        int item = new Random().nextInt(size);
-        int i = 0;
+    public static boolean isBridge(Graph graph, EFEdge edge) {
 
-        for (EFVertex v : set) {
-            if (item == i) {
-                return v;
-            }
-            i++;
+        Graph testGraph = new WeightedPseudograph(EFWeightedEdge.class);
+
+        for (EFVertex v : (Set<EFVertex>) graph.vertexSet()) {
+            testGraph.addVertex(v);
         }
 
-        // never reached actually
-        return (EFVertex) set.toArray()[0];
+        for (EFEdge e : (Set<EFEdge>) graph.edgeSet()) {
+            testGraph.addEdge(graph.getEdgeSource(e), graph.getEdgeTarget(e));
+        }
+
+        testGraph.removeEdge(edge);
+        boolean isBridge = false;
+
+        EFVertex startVertex = (EFVertex) graph.vertexSet().toArray()[0];
+
+        for (EFVertex v : (Set<EFVertex>) graph.vertexSet()) {
+
+            if (v.equals(startVertex)) continue;
+
+            BreadthFirstSearch bfs = new BreadthFirstSearch(graph, startVertex, v);
+
+            if (bfs.doSearch().equals("Kein Ergebnis.")) {
+                isBridge = true;
+                break;
+            }
+        }
+        return isBridge;
+    }
+
+    private static boolean checkIsEulerian(UndirectedGraph graph) {
+        return EulerianCircuit.isEulerian(graph);
     }
 }

@@ -13,11 +13,11 @@ import java.util.Set;
 
 public class ConnectedGraphRandomGenerator {
 
-    private RandomNameGenerator rg;
+    private RandomNameGenerator randomNameGenerator;
     private Random random;
 
     public ConnectedGraphRandomGenerator() {
-        rg = new RandomNameGenerator();
+        randomNameGenerator = new RandomNameGenerator();
         random = new Random();
     }
 
@@ -31,7 +31,7 @@ public class ConnectedGraphRandomGenerator {
 
         for (int i = 0; i < countVertices; i++) {
 
-            EFVertex v = new EFVertex(rg.getName(), ((int) (Math.random() * countVertices)));
+            EFVertex v = new EFVertex(randomNameGenerator.getName(), ((int) (Math.random() * countVertices)));
 
             if (unvisited.contains(v)) {
                 i--;
@@ -64,21 +64,18 @@ public class ConnectedGraphRandomGenerator {
             current = neighbour;
         }
 
-        if (graph.edgeSet().size() < countEdges) {
+        while (graph.edgeSet().size() < countEdges) {
+            // Get two random vertices
+            EFVertex firstRandomVertex = this.randomVertexFromSet(graph.vertexSet());
+            EFVertex secondRandomVertex = this.randomVertexFromSet(graph.vertexSet());
 
-            while (graph.edgeSet().size() < countEdges) {
-                // Get two random vertices
-                EFVertex firstRandomVertex = this.randomVertexFromSet(graph.vertexSet());
-                EFVertex secondRandomVertex = this.randomVertexFromSet(graph.vertexSet());
+            // Create an edge between them
+            EFEdge edge = (EFEdge) graph.addEdge(firstRandomVertex, secondRandomVertex);
+            int weight = firstRandomVertex.getAttributeValue() - secondRandomVertex.getAttributeValue();
 
-                // Create an edge between them
-                EFEdge edge = (EFEdge) graph.addEdge(firstRandomVertex, secondRandomVertex);
-                int weight = firstRandomVertex.getAttributeValue() - secondRandomVertex.getAttributeValue();
+            graph.setEdgeWeight(edge, Math.abs(weight));
 
-                graph.setEdgeWeight(edge, Math.abs(weight));
-
-                // repeat until the edge count has been reached
-            }
+            // repeat until the edge count has been reached
         }
 
         return graph;

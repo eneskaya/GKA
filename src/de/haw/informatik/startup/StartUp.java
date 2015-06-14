@@ -3,10 +3,7 @@ package de.haw.informatik.startup;
 import de.haw.informatik.algorithms.*;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.gui.*;
-import de.haw.informatik.tools.ConnectedGraphRandomGenerator;
-import de.haw.informatik.tools.GraphFileReader;
-import de.haw.informatik.tools.GraphFileWriter;
-import de.haw.informatik.tools.GraphRandomGenerator;
+import de.haw.informatik.tools.*;
 import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
@@ -30,9 +27,13 @@ public class StartUp {
 
     public static void main(String[] args) {
 
-        _mw = new MainWindow();
-        _fc = new FileChooser();
-        registerUIActions();
+//        _mw = new MainWindow();
+//        _fc = new FileChooser();
+//        registerUIActions();
+
+        System.out.println(EulerGraphGenerator.getGraph(10, 10));
+
+
     }
 
     private static void registerUIActions() {
@@ -240,6 +241,7 @@ public class StartUp {
                             Integer.parseInt(rg.getTextField1().getText()),
                             Integer.parseInt(rg.getTextField2().getText())
                     );
+
 
             // Attributed, weighted
             _propertyCodeForActualGraph = 7;
