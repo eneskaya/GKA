@@ -2,7 +2,6 @@ package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.datatypes.EFWeightedEdge;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.WeightedPseudograph;
@@ -47,19 +46,19 @@ public class BreadthFirstSearch {
                 edges = _graph.edgesOf(temp);
 
                 for (EFEdge e : edges) {
-                    EFVertex targetVertex = (EFVertex) _graph.getEdgeTarget(e);
+                    EFVertex targetEFVertex = (EFVertex) _graph.getEdgeTarget(e);
                     if (_graph instanceof WeightedPseudograph || _graph instanceof Pseudograph) {
-                        EFVertex targetVertex2;
+                        EFVertex targetEFVertex2;
 
-                        if (!map.containsKey(targetVertex2 = (EFVertex) _graph.getEdgeSource(e))) {
-                            queue.add(targetVertex2);
-                            map.put(targetVertex2, temp);
+                        if (!map.containsKey(targetEFVertex2 = (EFVertex) _graph.getEdgeSource(e))) {
+                            queue.add(targetEFVertex2);
+                            map.put(targetEFVertex2, temp);
                         }
                     }
 
-                    if (!map.containsKey(targetVertex)) {
-                        queue.add(targetVertex);
-                        map.put(targetVertex, temp);
+                    if (!map.containsKey(targetEFVertex)) {
+                        queue.add(targetEFVertex);
+                        map.put(targetEFVertex, temp);
                     }
                 }
             }

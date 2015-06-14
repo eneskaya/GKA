@@ -237,8 +237,7 @@ public class StartUp {
 
             _graph = (new ConnectedGraphRandomGenerator())
                     .getRandomConnectedGraph(
-                            Integer.parseInt(rg.getTextField1().getText()),
-                            Integer.parseInt(rg.getTextField2().getText())
+                            Integer.parseInt(rg.getTextField1().getText())
                     );
 
             // Attributed, weighted

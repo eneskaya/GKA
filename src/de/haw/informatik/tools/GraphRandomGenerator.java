@@ -7,8 +7,8 @@ import org.jgrapht.Graph;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.graph.WeightedPseudograph;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class GraphRandomGenerator {
 
@@ -32,11 +32,10 @@ public class GraphRandomGenerator {
         }
 
         // Add the vertices to the graph
-        for (EFVertex v : vertices) {
-            _graph.addVertex(v);
-        }
+        vertices.forEach(_graph::addVertex);
 
-        Object[] verticesArray = vertices.toArray();
+        // Add the vertices into an ArrayList for later usage
+        List<EFVertex> verticesArray = vertices.stream().collect(Collectors.toList());
 
         // Generate edges
         for (int i = 0; i < edgeCount; i++) {
@@ -44,9 +43,10 @@ public class GraphRandomGenerator {
             int a = (int) (Math.random() * vertexCount);
             int b = (int) (Math.random() * vertexCount);
 
-            EFEdge edge = (EFEdge) _graph.addEdge(verticesArray[a], verticesArray[b]);
+            EFEdge edge = (EFEdge) _graph.addEdge(verticesArray.get(a), verticesArray.get(b));
 
-            int weight = ((EFVertex) verticesArray[a]).getAttributeValue() - ((EFVertex) verticesArray[b]).getAttributeValue();
+            int weight =
+                    verticesArray.get(a).getAttributeValue() - verticesArray.get(a).getAttributeValue();
 
             ((WeightedGraph) _graph).setEdgeWeight(edge, Math.abs(weight));
         }

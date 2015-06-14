@@ -1,7 +1,7 @@
 package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
-import de.haw.informatik.datatypes.EFVertex;
+import de.haw.informatik.datatypes.EFEFVertex;
 
 import org.jgrapht.Graph;
 import org.jgrapht.graph.Pseudograph;
@@ -11,29 +11,29 @@ import java.util.*;
 
 public class Dijkstra {
 
-    public static EFVertex _source;
-    public static EFVertex _target;
-    public static Map<EFVertex, Double> _map = new HashMap<>();
+    public static EFEFVertex _source;
+    public static EFEFVertex _target;
+    public static Map<EFEFVertex, Double> _map = new HashMap<>();
     public static int _graphAccesses;
 
     /**
      * Computes the shortest path for two given vertices and a graph.
      *
      * @param graph  A graph
-     * @param source The source vertex
+     * @param source The source EFVertex
      */
-    public static void computePath(Graph graph, EFVertex source) {
+    public static void computePath(Graph graph, EFEFVertex source) {
         _source = source;
         _graphAccesses = 0;
 
-        Set<EFVertex> vertexes = graph.vertexSet();
+        Set<EFEFVertex> EFVertexes = graph.EFVertexSet();
         _graphAccesses++;
 
-        for (EFVertex v : vertexes) {
+        for (EFEFVertex v : EFVertexes) {
             _map.put(v, Double.POSITIVE_INFINITY);
         }
 
-        PriorityQueue<EFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
+        PriorityQueue<EFEFVertex> leQueue = new PriorityQueue<>((o1, o2) -> {
             return Double.compare(_map.get(o1), _map.get(o2));
         });
 
@@ -41,34 +41,34 @@ public class Dijkstra {
         _map.put(source, 0.0);
 
         while (!leQueue.isEmpty()) {
-            EFVertex currentVertex = leQueue.poll();
+            EFEFVertex currentEFVertex = leQueue.poll();
 
-            Set<EFEdge> set = graph.edgesOf(currentVertex);
+            Set<EFEdge> set = graph.edgesOf(currentEFVertex);
             _graphAccesses++;
 
             for (EFEdge e : set) {
 
                 double weight = graph.getEdgeWeight(e);
                 _graphAccesses++;
-                double distanceFromCurrentToTarget = _map.get(currentVertex) + weight;
+                double distanceFromCurrentToTarget = _map.get(currentEFVertex) + weight;
 
-                EFVertex target = (EFVertex) graph.getEdgeTarget(e);
+                EFEFVertex target = (EFEFVertex) graph.getEdgeTarget(e);
                 _graphAccesses++;
 
 
                 if (graph instanceof WeightedPseudograph || graph instanceof Pseudograph) {
-                    EFVertex targetVertex2 = (EFVertex) graph.getEdgeSource(e);
+                    EFEFVertex targetEFVertex2 = (EFEFVertex) graph.getEdgeSource(e);
                     _graphAccesses++;
 
-                    if (!_map.containsKey(targetVertex2)) {
-                        _map.put(targetVertex2, distanceFromCurrentToTarget);
+                    if (!_map.containsKey(targetEFVertex2)) {
+                        _map.put(targetEFVertex2, distanceFromCurrentToTarget);
                     }
 
-                    if (distanceFromCurrentToTarget < _map.get(targetVertex2)) {
-                        leQueue.remove(targetVertex2);
-                        _map.replace(targetVertex2, distanceFromCurrentToTarget);
-                        targetVertex2._predecessor = currentVertex;
-                        leQueue.add(targetVertex2);
+                    if (distanceFromCurrentToTarget < _map.get(targetEFVertex2)) {
+                        leQueue.remove(targetEFVertex2);
+                        _map.replace(targetEFVertex2, distanceFromCurrentToTarget);
+                        targetEFVertex2._predecessor = currentEFVertex;
+                        leQueue.add(targetEFVertex2);
                     }
                 }
 
@@ -79,7 +79,7 @@ public class Dijkstra {
                 if (distanceFromCurrentToTarget < _map.get(target)) {
                     leQueue.remove(target);
                     _map.replace(target, distanceFromCurrentToTarget);
-                    target._predecessor = currentVertex;
+                    target._predecessor = currentEFVertex;
                     leQueue.add(target);
                 }
             }
@@ -87,17 +87,17 @@ public class Dijkstra {
     }
 
     /**
-     * Returns the shortest path to the given target vertex. Already formatted
+     * Returns the shortest path to the given target EFVertex. Already formatted
      * output.
      *
-     * @param target The target EFVertex
+     * @param target The target EFEFVertex
      * @return Formatted path representation
      */
-    public static String getShortestPathTo(EFVertex target) {
+    public static String getShortestPathTo(EFEFVertex target) {
         String path = "";
         _target = target;
 
-        for (EFVertex v = target; v != null; v = v._predecessor) {
+        for (EFEFVertex v = target; v != null; v = v._predecessor) {
             path = " --> " + v.getName() + path;
         }
 

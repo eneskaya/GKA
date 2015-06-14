@@ -1,32 +1,27 @@
 package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
-import de.haw.informatik.datatypes.EFVertex;
-import de.haw.informatik.datatypes.EFWeightedEdge;
+import de.haw.informatik.datatypes.EFEFVertex;
 import org.jgrapht.Graph;
 
 import java.util.*;
 
-/**
- * Created by finnmasurat on 10.06.15.
- */
 public class Hierholzer {
 
+    public static List<EFEFVertex> getPath(Graph graph) {
 
-    public static List<EFVertex> getPath(Graph graph) {
+        EFEFVertex start;
+        EFEFVertex end;
 
-        EFVertex start;
-        EFVertex end;
-
-        ArrayList<EFVertex> oddCounter = new ArrayList<>();
-        Map<EFVertex, Double> map = new HashMap<>();
+        ArrayList<EFEFVertex> oddCounter = new ArrayList<>();
+        Map<EFEFVertex, Double> map = new HashMap<>();
 
 
-        Set<EFVertex> vertexSet = graph.vertexSet();
-        for (EFVertex ef : vertexSet) {
+        Set<EFEFVertex> EFVertexSet = graph.EFVertexSet();
+        for (EFEFVertex ef : EFVertexSet) {
 
             if (graph.edgesOf(ef).isEmpty()) {
-                throw new IllegalArgumentException("Isolated vertex");
+                throw new IllegalArgumentException("Isolated EFVertex");
             } else if (graph.edgesOf(ef).size() % 2 == 1) {
                 oddCounter.add(ef);
             }
@@ -40,22 +35,22 @@ public class Hierholzer {
             start = oddCounter.get(0);
             end = oddCounter.get(1);
         } else {
-            start = (EFVertex) graph.vertexSet().iterator().next();
+            start = (EFEFVertex) graph.EFVertexSet().iterator().next();
             end = start;
         }
 
         //---------------------------------------------------------
 
-        ArrayList<EFVertex> way = new ArrayList<>();
+        ArrayList<EFEFVertex> way = new ArrayList<>();
         int insertIndex = 0;
         while (graph.edgeSet().size() > 0) {
 
-            List<EFVertex> w = findWay(graph, start, end);
+            List<EFEFVertex> w = findWay(graph, start, end);
             way.addAll(insertIndex, w);
 
             for (int i = 0; i < way.size(); i++) {
-                EFVertex v = way.get(i);
-                if (graph.containsVertex(v)) {
+                EFEFVertex v = way.get(i);
+                if (graph.containsEFVertex(v)) {
                     start = v;
                     end = v;
                     insertIndex = i;
@@ -68,36 +63,35 @@ public class Hierholzer {
     }
 
 
-    private static List<EFVertex> findWay(Graph graph, EFVertex start, EFVertex end) {
-        ArrayList<EFVertex> way = new ArrayList<>();
-        EFVertex currentVertex = start;
+    private static List<EFEFVertex> findWay(Graph graph, EFEFVertex start, EFEFVertex end) {
+        ArrayList<EFEFVertex> way = new ArrayList<>();
+        EFEFVertex currentEFVertex = start;
 
         do {
-            way.add(currentVertex);
-            ArrayList<EFVertex> neighbours = new ArrayList<>();
-            Set<EFEdge> set = graph.edgesOf(currentVertex);
+            way.add(currentEFVertex);
+            ArrayList<EFEFVertex> neighbours = new ArrayList<>();
+            Set<EFEdge> set = graph.edgesOf(currentEFVertex);
             for (EFEdge ef : set) {
 
-                if (graph.getEdgeSource(ef).equals(currentVertex)) {
-                    neighbours.add((EFVertex) graph.getEdgeTarget(ef));
+                if (graph.getEdgeSource(ef).equals(currentEFVertex)) {
+                    neighbours.add((EFEFVertex) graph.getEdgeTarget(ef));
                 } else {
-                    neighbours.add((EFVertex) graph.getEdgeSource(ef));
+                    neighbours.add((EFEFVertex) graph.getEdgeSource(ef));
                 }
-
             }
 
-            EFVertex next = neighbours.iterator().next();
+            EFEFVertex next = neighbours.iterator().next();
 
-            graph.removeEdge(currentVertex, next);
-            if (graph.edgesOf(currentVertex).isEmpty()) {
-                graph.removeVertex(currentVertex);
+            graph.removeEdge(currentEFVertex, next);
+            if (graph.edgesOf(currentEFVertex).isEmpty()) {
+                graph.removeEFVertex(currentEFVertex);
             }
 
             if (graph.edgesOf(next).isEmpty()) {
-                graph.removeVertex(next);
+                graph.removeEFVertex(next);
             }
-            currentVertex = next;
-        } while (!currentVertex.equals(end));
+            currentEFVertex = next;
+        } while (!currentEFVertex.equals(end));
 
         if (!start.equals(end)) {
             way.add(end);

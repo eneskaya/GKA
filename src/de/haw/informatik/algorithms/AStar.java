@@ -2,12 +2,14 @@ package de.haw.informatik.algorithms;
 
 import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
-
 import org.jgrapht.Graph;
 import org.jgrapht.graph.Pseudograph;
 import org.jgrapht.graph.WeightedPseudograph;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Set;
 
 public class AStar {
 
@@ -20,7 +22,7 @@ public class AStar {
      * Computes the shortest path for two given vertices and a graph.
      *
      * @param graph  A graph
-     * @param source The source vertex
+     * @param source The source EFVertex
      */
     public static void computePath(Graph graph, EFVertex source) {
         _source = source;
@@ -58,20 +60,20 @@ public class AStar {
 
                 if (graph instanceof WeightedPseudograph || graph instanceof Pseudograph) {
 
-                    EFVertex targetVertex2 = (EFVertex) graph.getEdgeSource(e);
+                    EFVertex targetVertex = (EFVertex) graph.getEdgeSource(e);
                     _graphAccesses++;
 
-                    if (!_map.containsKey(targetVertex2)) {
-                        _map.put(targetVertex2, distanceFromCurrentToTarget);
+                    if (!_map.containsKey(targetVertex)) {
+                        _map.put(targetVertex, distanceFromCurrentToTarget);
                     }
 
-                    if (distanceFromCurrentToTarget < _map.get(targetVertex2)) {
-                        leQueue.remove(targetVertex2);
+                    if (distanceFromCurrentToTarget < _map.get(targetVertex)) {
+                        leQueue.remove(targetVertex);
 
 
-                        _map.replace(targetVertex2, distanceFromCurrentToTarget);
-                        targetVertex2._predecessor = currentVertex;
-                        leQueue.add(targetVertex2);
+                        _map.replace(targetVertex, distanceFromCurrentToTarget);
+                        targetVertex._predecessor = currentVertex;
+                        leQueue.add(targetVertex);
                     }
                 }
 
@@ -92,10 +94,10 @@ public class AStar {
     }
 
     /**
-     * Returns the shortest path to the given target vertex.
+     * Returns the shortest path to the given target EFVertex.
      * Already formatted output.
      *
-     * @param target The target EFVertex
+     * @param target The target EFEFVertex
      * @return Formatted path representation
      */
     public static String getShortestPathTo(EFVertex target) {

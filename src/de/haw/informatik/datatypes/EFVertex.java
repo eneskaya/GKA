@@ -8,10 +8,10 @@ public class EFVertex implements Comparable<EFVertex> {
     public EFVertex _predecessor;
 
     /**
-     * Creates an EFVertex which is attributed.
+     * Creates an EFEFVertex which is attributed.
      *
-     * @param name      Name of the vertex
-     * @param attribute Attribute value of vertex
+     * @param name      Name of the EFVertex
+     * @param attribute Attribute value of EFVertex
      */
     public EFVertex(String name, int attribute) {
         _name = name;
@@ -20,9 +20,9 @@ public class EFVertex implements Comparable<EFVertex> {
     }
 
     /**
-     * Creates an EFVertex which is not attributed.
+     * Creates an EFEFVertex which is not attributed.
      *
-     * @param name Name of the vertex
+     * @param name Name of the EFVertex
      */
     public EFVertex(String name) {
         _name = name;
@@ -48,14 +48,7 @@ public class EFVertex implements Comparable<EFVertex> {
     @Override
     public int hashCode() {
 
-        int result = 0;
-
-        for (int i = 0; i < _name.length(); i++) {
-            result += _name.charAt(i);
-        }
-
         return _name.hashCode();
-
     }
 
     @Override

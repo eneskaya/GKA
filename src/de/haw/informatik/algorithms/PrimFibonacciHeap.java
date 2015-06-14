@@ -21,13 +21,14 @@ public class PrimFibonacciHeap {
     public static double totalWeight;
     public static int graphAccesses;
 
-    public static Graph computeGraph(Graph graph, EFVertex startVertex) {
+    @SuppressWarnings("unchecked")
+    public static Graph computeGraph(Graph graph, EFVertex startEFVertex) {
 
         // put all Vertices with POSITIV_INFINITY in the map, to check that it will definitly be change
         for (EFVertex ef : (Set<EFVertex>) graph.vertexSet()) {
 
             graphAccesses++;
-            if (ef.equals(startVertex)) {
+            if (ef.equals(startEFVertex)) {
                 FibonacciHeap.Entry entry = leFib.enqueue(ef, 0.0);
                 entryMap.put(ef, entry);
                 map.put(ef, 0.0);
@@ -42,23 +43,23 @@ public class PrimFibonacciHeap {
         WeightedPseudograph<EFVertex, EFWeightedEdge> spanningTree =
                 new WeightedPseudograph<>(EFWeightedEdge.class);
 
-        spanningTree.addVertex(startVertex);
+        spanningTree.addVertex(startEFVertex);
 
         while (!leFib.isEmpty()) {
 
-            EFVertex currentVertex = leFib.dequeueMin().getValue();
-            Set<EFWeightedEdge> set = graph.edgesOf(currentVertex);
+            EFVertex currentEFVertex = leFib.dequeueMin().getValue();
+            Set<EFWeightedEdge> set = graph.edgesOf(currentEFVertex);
 
 
-            if (Double.compare(map.get(currentVertex), Double.POSITIVE_INFINITY) == 0) {
-                spanningTree.addVertex(currentVertex);
+            if (Double.compare(map.get(currentEFVertex), Double.POSITIVE_INFINITY) == 0) {
+                spanningTree.addVertex(currentEFVertex);
             }
 
             for (EFWeightedEdge e : set) {
                 graphAccesses++;
                 // refreshing the distances from the spanningTree to the Vertices
                 if (graph.getEdgeWeight(e) < map.get(graph.getEdgeTarget(e)) &&
-                        graph.getEdgeSource(e).equals(currentVertex) &&
+                        graph.getEdgeSource(e).equals(currentEFVertex) &&
                         !spanningTree.containsVertex((EFVertex) graph.getEdgeTarget(e))) {
 
                     leFib.delete(entryMap.get(graph.getEdgeTarget(e)));
@@ -68,7 +69,7 @@ public class PrimFibonacciHeap {
                     FibonacciHeap.Entry entry = leFib.enqueue((EFVertex) graph.getEdgeTarget(e), graph.getEdgeWeight(e));
                     entryMap.put((EFVertex) graph.getEdgeTarget(e), entry);
                 } else if (graph.getEdgeWeight(e) < map.get(graph.getEdgeSource(e)) &&
-                        graph.getEdgeTarget(e).equals(currentVertex) &&
+                        graph.getEdgeTarget(e).equals(currentEFVertex) &&
                         !spanningTree.containsVertex((EFVertex) graph.getEdgeSource(e))) {
 
                     leFib.delete(entryMap.get(graph.getEdgeSource(e)));
@@ -83,11 +84,11 @@ public class PrimFibonacciHeap {
 
             // add the clostest direct neighbour to the spanningTree
             // if the spanningTree doesnt contains it already
-            if (!spanningTree.containsVertex(currentVertex)) {
-                spanningTree.addVertex(currentVertex);
-                EFWeightedEdge temporaryEdge = spanningTree.addEdge(currentVertex._predecessor, currentVertex);
-                spanningTree.setEdgeWeight(temporaryEdge, map.get(currentVertex));
-                totalWeight += map.get(currentVertex);
+            if (!spanningTree.containsVertex(currentEFVertex)) {
+                spanningTree.addVertex(currentEFVertex);
+                EFWeightedEdge temporaryEdge = spanningTree.addEdge(currentEFVertex._predecessor, currentEFVertex);
+                spanningTree.setEdgeWeight(temporaryEdge, map.get(currentEFVertex));
+                totalWeight += map.get(currentEFVertex);
             }
         }
 
