@@ -19,11 +19,6 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 
-/**
- * Created by finnmasurat on 12.06.15.
- */
-
-
 public class HierholzerTest {
 
     GraphFileReader _gf;
@@ -39,24 +34,27 @@ public class HierholzerTest {
     @Test
     public void verticesCount() {
 
-        Graph graph = EulerGraphGenerator.getGraph(9, 15);
+        for (int i = 20; i < 100; i++) {
+            Graph graph = EulerGraphGenerator.getGraph(i, i + 5);
+
+            int verticesCount = graph.vertexSet().size();
+            Set<EFVertex> eulerSet = new HashSet<>();
+
+            if (EulerianCircuit.isEulerian((UndirectedGraph) graph)) {
+                List<EFVertex> eulerway = Hierholzer.getPath(graph);
+
+                for (int j = 0; j < eulerway.size(); j++) {
+
+                    if (!eulerSet.contains(eulerway.get(j))) {
+                        eulerSet.add(eulerway.get(j));
+                    }
 
 
-        int verticesCount = graph.vertexSet().size();
+                }
 
-        Set<EFVertex> eulerSet = new HashSet<>();
-        List<EFVertex> eulerway = Hierholzer.getPath(graph);
-
-        for (int i = 0; i < eulerway.size(); i++) {
-
-            if (!eulerSet.contains(eulerway.get(i))) {
-                eulerSet.add(eulerway.get(i));
+                assertEquals(eulerSet.size(), verticesCount);
             }
-
-
         }
-
-        assertEquals(eulerSet.size(), verticesCount);
     }
 
     @Test
@@ -107,8 +105,6 @@ public class HierholzerTest {
         List<EFVertex> hierholzerWay = Hierholzer.getPath(graph);
 
         assertEquals(edgeCount + 1, hierholzerWay.size());
-
-
     }
 
     @Test

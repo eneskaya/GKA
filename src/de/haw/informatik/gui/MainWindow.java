@@ -20,6 +20,9 @@ public class MainWindow {
     JMenuItem algoPrim;
     JMenuItem algoPrimFib;
 
+    JMenuItem algoHierholzer;
+    JMenuItem algoFleury;
+
     JMenuItem randomGraphGenerate;
     JMenuItem randomConnectedGraphGenerate;
 
@@ -70,6 +73,9 @@ public class MainWindow {
 
         algoKruskal = new JMenuItem("Kruskal");
 
+        algoHierholzer = new JMenuItem("Hierholzer");
+        algoFleury = new JMenuItem("Fleury");
+
         algoMenu.add(algoBFS);
         algoMenu.add(algoDijkstra);
         algoMenu.add(algoAStar);
@@ -77,6 +83,8 @@ public class MainWindow {
         algoMenu.add(algoKruskal);
         algoMenu.add(algoPrim);
         algoMenu.add(algoPrimFib);
+        algoMenu.add(algoHierholzer);
+        algoMenu.add(algoFleury);
 
         menuBar.add(algoMenu);
 
@@ -142,6 +150,14 @@ public class MainWindow {
 
     public JMenuItem getAlgoPrimFib() {
         return algoPrimFib;
+    }
+
+    public JMenuItem getAlgoFleury() {
+        return algoFleury;
+    }
+
+    public JMenuItem getAlgoHierholzer() {
+        return algoHierholzer;
     }
 
     /**

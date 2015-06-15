@@ -1,6 +1,7 @@
 package de.haw.informatik.startup;
 
 import de.haw.informatik.algorithms.*;
+import de.haw.informatik.datatypes.EFEdge;
 import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.gui.*;
 import de.haw.informatik.tools.*;
@@ -9,19 +10,20 @@ import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 import org.jgrapht.Graph;
 import org.jgrapht.UndirectedGraph;
-import org.jgrapht.alg.EulerianCircuit;
 import org.jgrapht.ext.JGraphModelAdapter;
 
 import javax.swing.*;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class StartUp {
 
     private static Graph _graph;
+    private static UndirectedGraph<EFVertex, EFEdge> _undirected;
     private static FileChooser _fc;
     private static JGraphModelAdapter _adapter;
     private static MainWindow _mw;
@@ -29,16 +31,15 @@ public class StartUp {
 
     public static void main(String[] args) {
 
-//        _mw = new MainWindow();
-//        _fc = new FileChooser();
-//        registerUIActions();
+        _mw = new MainWindow();
+        _fc = new FileChooser();
+        registerUIActions();
+
+//        UndirectedGraph graph = EulerGraphGenerator.getGraph(5, 8);
 //
-        UndirectedGraph graph = EulerGraphGenerator.getGraph(5, 8);
-
-        System.out.println("V: " + graph.vertexSet().size() + " E: " + graph.edgeSet().size());
-        System.out.println("Built-In: \t" + EulerianCircuit.getEulerianCircuitVertices(graph));
-        System.out.println("Fleury: \t" + Fleury.getCircuit(graph));
-
+//        System.out.println("V: " + graph.vertexSet().size() + " E: " + graph.edgeSet().size());
+//        System.out.println("Built-In: \t" + EulerianCircuit.getEulerianCircuitVertices(graph));
+//        System.out.println("Fleury: \t" + Fleury.getCircuit(graph));
     }
 
     private static void registerUIActions() {
@@ -66,6 +67,10 @@ public class StartUp {
         _mw.getAlgoPrimFib().addActionListener(e -> primFibAction());
 
         _mw.getRandomEulerianGraphGenerate().addActionListener(e -> randomEulerGraphAction());
+
+        _mw.getAlgoFleury().addActionListener(e -> fleuryAction());
+
+        _mw.getAlgoHierholzer().addActionListener(e -> hierholzAction());
     }
 
     private static void fileOpenAction() {
@@ -287,7 +292,7 @@ public class StartUp {
             _mw.getPanelContainer().removeAll();
 
 
-            _graph = EulerGraphGenerator
+            _undirected = EulerGraphGenerator
                     .getGraph(
                             Integer.parseInt(rg.getTextField1().getText()),
                             Integer.parseInt(rg.getTextField2().getText())
@@ -296,8 +301,8 @@ public class StartUp {
             // Attributed, weighted
             _propertyCodeForActualGraph = 0;
 
-            Set<EFVertex> vertices = _graph.vertexSet();
-            _adapter = new JGraphModelAdapter(_graph);
+            Set<EFVertex> vertices = _undirected.vertexSet();
+            _adapter = new JGraphModelAdapter(_undirected);
 
             int x, y = 0;
 
@@ -442,6 +447,36 @@ public class StartUp {
             });
 
             pg.setVisible(true);
+        }
+    }
+
+    private static void fleuryAction() {
+
+        if (_undirected == null) {
+            JOptionPane.showMessageDialog(_mw.getPanelContainer(), "Please generate an eulerian graph first.");
+        } else {
+            List list = Fleury.getCircuit(_undirected);
+
+            TextDialog td = new TextDialog();
+            td.setTitle("Fleury");
+            td.getContentPane().setText(list.toString());
+
+            td.setVisible(true);
+        }
+
+    }
+
+    private static void hierholzAction() {
+        if (_undirected == null) {
+            JOptionPane.showMessageDialog(_mw.getPanelContainer(), "Please generate an eulerian graph first.");
+        } else {
+            List list = Hierholzer.getPath(_undirected);
+
+            TextDialog td = new TextDialog();
+            td.setTitle("Hierholzer");
+            td.getContentPane().setText(list.toString());
+
+            td.setVisible(true);
         }
     }
 

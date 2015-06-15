@@ -28,7 +28,7 @@ public class Fleury {
         path.add(current);
 
         // while there are still edges to be traversed...
-        while (graph.edgeSet().size() != 0) {
+        while (graph.edgeSet().size() > 0) {
 
             // ...select the edges of the the current vertex
             Set<EFEdge> currentEdgeSet = graph.edgesOf(current);
@@ -48,16 +48,21 @@ public class Fleury {
                 }
             }
 
+            // If all the edges were bridge edges, just choose one...
             if (chosenEdge == null) chosenEdge = currentEdgeSet.iterator().next();
 
             // Now, from the chosen edge, "travel" to the target of the edge
-            EFVertex travelTo = graph.getEdgeTarget(chosenEdge).equals(current) ?
-                    graph.getEdgeSource(chosenEdge) : graph.getEdgeTarget(chosenEdge);
+            EFVertex travelTo;
+
+            if (graph.getEdgeTarget(chosenEdge).equals(current)) {
+                travelTo = graph.getEdgeSource(chosenEdge);
+            } else {
+                travelTo = graph.getEdgeTarget(chosenEdge);
+            }
 
             // The new current node is the one we just travelled to
             current = travelTo;
 
-            if (path.get(0).equals(travelTo)) continue;
             path.add(travelTo);
 
             // Remove the edge we have traversed

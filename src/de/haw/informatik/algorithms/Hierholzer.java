@@ -8,7 +8,6 @@ import java.util.*;
 
 public class Hierholzer {
 
-
     public static List<EFVertex> getPath(Graph graph) {
 
         EFVertex start;
