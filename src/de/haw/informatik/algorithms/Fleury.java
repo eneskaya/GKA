@@ -22,16 +22,16 @@ public class Fleury {
         List<EFVertex> path = new LinkedList<>();
 
         // choose any vertex to start from
-        EFVertex start = graph.vertexSet().iterator().next();
+        EFVertex current = graph.vertexSet().iterator().next();
 
         // add the starting vertex as the first node
-        path.add(start);
+        path.add(current);
 
         // while there are still edges to be traversed...
         while (graph.edgeSet().size() != 0) {
 
             // ...select the edges of the the current vertex
-            Set<EFEdge> currentEdgeSet = graph.edgesOf(start);
+            Set<EFEdge> currentEdgeSet = graph.edgesOf(current);
 
             EFEdge chosenEdge = null;
 
@@ -48,12 +48,16 @@ public class Fleury {
                 }
             }
 
+            if (chosenEdge == null) chosenEdge = currentEdgeSet.iterator().next();
+
             // Now, from the chosen edge, "travel" to the target of the edge
-            EFVertex travelTo = graph.getEdgeTarget(chosenEdge);
+            EFVertex travelTo = graph.getEdgeTarget(chosenEdge).equals(current) ?
+                    graph.getEdgeSource(chosenEdge) : graph.getEdgeTarget(chosenEdge);
 
             // The new current node is the one we just travelled to
-            start = travelTo;
+            current = travelTo;
 
+            if (path.get(0).equals(travelTo)) continue;
             path.add(travelTo);
 
             // Remove the edge we have traversed

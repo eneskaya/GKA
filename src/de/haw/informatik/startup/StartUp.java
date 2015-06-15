@@ -33,10 +33,11 @@ public class StartUp {
 //        _fc = new FileChooser();
 //        registerUIActions();
 //
-        UndirectedGraph graph = EulerGraphGenerator.getGraph(10, 15);
+        UndirectedGraph graph = EulerGraphGenerator.getGraph(5, 8);
 
-        System.out.println(EulerianCircuit.getEulerianCircuitVertices(graph));
-        System.out.println(Fleury.getCircuit(graph));
+        System.out.println("V: " + graph.vertexSet().size() + " E: " + graph.edgeSet().size());
+        System.out.println("Built-In: \t" + EulerianCircuit.getEulerianCircuitVertices(graph));
+        System.out.println("Fleury: \t" + Fleury.getCircuit(graph));
 
     }
 
