@@ -8,6 +8,8 @@ import org.jgraph.JGraph;
 import org.jgraph.graph.DefaultGraphCell;
 import org.jgraph.graph.GraphConstants;
 import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.EulerianCircuit;
 import org.jgrapht.ext.JGraphModelAdapter;
 
 import javax.swing.*;
@@ -30,13 +32,11 @@ public class StartUp {
 //        _mw = new MainWindow();
 //        _fc = new FileChooser();
 //        registerUIActions();
+//
+        UndirectedGraph graph = EulerGraphGenerator.getGraph(10, 15);
 
-//        UndirectedGraph graph = EulerGraphGenerator.getGraph(10, 15);
-//        System.out.println(graph);
-//
-//        System.out.println(Fleury.isBridge(graph, (EFEdge) graph.edgeSet().iterator().next()));
-//
-//        System.out.println(graph);
+        System.out.println(EulerianCircuit.getEulerianCircuitVertices(graph));
+        System.out.println(Fleury.getCircuit(graph));
 
     }
 

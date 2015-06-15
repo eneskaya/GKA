@@ -14,22 +14,50 @@ import java.util.Set;
 @SuppressWarnings("unchecked")
 public class Fleury {
 
-    public static List<EFVertex> getCircuit(UndirectedGraph graph) {
+    public static List<EFVertex> getCircuit(UndirectedGraph<EFVertex, EFEdge> graph) {
 
-        // Abbrechen, wenn kein Eulergraph
+        // Cancel, if no eulerian graph
         if (!EulerianCircuit.isEulerian(graph)) throw new IllegalArgumentException("Kein Eulergraph.");
 
         List<EFVertex> path = new LinkedList<>();
 
-        EFVertex start = (EFVertex) graph.vertexSet().iterator().next();
+        // choose any vertex to start from
+        EFVertex start = graph.vertexSet().iterator().next();
 
+        // add the starting vertex as the first node
         path.add(start);
 
-        while (graph.edgeSet().size() > 0) {
+        // while there are still edges to be traversed...
+        while (graph.edgeSet().size() != 0) {
 
-            Set<EFVertex> e = graph.edgesOf(start);
+            // ...select the edges of the the current vertex
+            Set<EFEdge> currentEdgeSet = graph.edgesOf(start);
 
+            EFEdge chosenEdge = null;
 
+            // If there is only one choice, choose this edge...
+            if (currentEdgeSet.size() == 1) {
+                chosenEdge = currentEdgeSet.iterator().next();
+            } else {
+                // else, go through the edges and select one that isn't a bridge
+                for (EFEdge e : currentEdgeSet) {
+                    if (!isBridge(graph, e)) {
+                        chosenEdge = e;
+                        break;
+                    }
+                }
+            }
+
+            // Now, from the chosen edge, "travel" to the target of the edge
+            EFVertex travelTo = graph.getEdgeTarget(chosenEdge);
+
+            // The new current node is the one we just travelled to
+            start = travelTo;
+
+            path.add(travelTo);
+
+            // Remove the edge we have traversed
+            graph.removeEdge(chosenEdge);
         }
 
         return path;
