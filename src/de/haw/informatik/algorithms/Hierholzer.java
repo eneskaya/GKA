@@ -73,6 +73,7 @@ public class Hierholzer {
         EFVertex currentVertex = start;
 
         do {
+
             way.add(currentVertex);
             ArrayList<EFVertex> neighbours = new ArrayList<>();
 
@@ -99,7 +100,6 @@ public class Hierholzer {
                 graph.removeVertex(next);
             }
             currentVertex = next;
-
 
         } while (!currentVertex.equals(end));
 

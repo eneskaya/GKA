@@ -7,6 +7,8 @@ import de.haw.informatik.datatypes.EFVertex;
 import de.haw.informatik.tools.EulerGraphGenerator;
 import de.haw.informatik.tools.GraphFileReader;
 import org.jgrapht.Graph;
+import org.jgrapht.UndirectedGraph;
+import org.jgrapht.alg.EulerianCircuit;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -37,7 +39,8 @@ public class HierholzerTest {
     @Test
     public void verticesCount() {
 
-        Graph graph = EulerGraphGenerator.getGraph(10, 15);
+        Graph graph = EulerGraphGenerator.getGraph(9, 15);
+
 
         int verticesCount = graph.vertexSet().size();
 
@@ -120,17 +123,17 @@ public class HierholzerTest {
     }
 
 
-    //@Test
+    @Test
     public void generatedEulerBomb() {
 
-        for(int i = 20; i < 30; i++) {
+        for (int i = 20; i < 100; i++) {
             Graph graph = EulerGraphGenerator.getGraph(i, i +1);
             int edgeCounter = graph.edgeSet().size();
-            System.out.println(i);
-            List<EFVertex> hierholzer = Hierholzer.getPath(graph);
-
-            assertEquals(hierholzer.get(0), hierholzer.get(hierholzer.size() - 1));
-            assertEquals(hierholzer.size(), edgeCounter + 1);
+            if (EulerianCircuit.isEulerian((UndirectedGraph) graph)) {
+                List<EFVertex> hierholzer = Hierholzer.getPath(graph);
+                assertEquals(hierholzer.get(0), hierholzer.get(hierholzer.size() - 1));
+                assertEquals(hierholzer.size(), edgeCounter + 1);
+            }
 
         }
     }
