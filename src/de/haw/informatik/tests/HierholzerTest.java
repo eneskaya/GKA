@@ -23,16 +23,26 @@ public class HierholzerTest {
 
     GraphFileReader _gf;
     GraphFileReader _sanduhr;
+    GraphFileReader _iso;
 
     @Before
     public void setUp() {
         _gf = new GraphFileReader("bsp/nikolaus.graph");
         _sanduhr = new GraphFileReader("bsp/sanduhr.graph");
+        _iso = new GraphFileReader("bsp/isolated.graph");
     }
 
 
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsolatedVertex() {
+
+        Graph graph = _iso.getGraph();
+        ArrayList<EFVertex> hierholzer = (ArrayList<EFVertex>) Hierholzer.getPath(graph);
+
+    }
+
     @Test
-    public void verticesCount() {
+    public void testVerticesCount() {
 
         for (int i = 20; i < 100; i++) {
             Graph graph = EulerGraphGenerator.getGraph(i, i + 5);
@@ -58,7 +68,7 @@ public class HierholzerTest {
     }
 
     @Test
-    public void nikolausTest() {
+    public void testNikolaus() {
 
 
         Graph graph = _gf.getGraph();
@@ -83,7 +93,7 @@ public class HierholzerTest {
     }
 
     @Test
-    public void sanduhrTest() {
+    public void testSanduhr() {
 
         Graph graph = _sanduhr.getGraph();
 
@@ -93,10 +103,8 @@ public class HierholzerTest {
 
     }
 
-
-
     @Test
-    public void edgesCount() {
+    public void testEdgesCount() {
 
         Graph graph = EulerGraphGenerator.getGraph(9, 15);
 
@@ -108,7 +116,7 @@ public class HierholzerTest {
     }
 
     @Test
-    public void eulerCircuit() {
+    public void testEulerCircuit() {
 
         Graph graph = EulerGraphGenerator.getGraph(9, 15);
 
@@ -120,7 +128,7 @@ public class HierholzerTest {
 
 
     @Test
-    public void generatedEulerBomb() {
+    public void testGeneratedEulerBomb() {
 
         for (int i = 20; i < 100; i++) {
             Graph graph = EulerGraphGenerator.getGraph(i, i +1);
